@@ -1,0 +1,44 @@
+/*#wrapper {
+	width: 980px;
+	margin: 0 auto;
+	font-family: Helvetica;
+	font-size: 16px;
+}
+
+#test-results {
+	width: 100%;
+	text-align: center;
+}
+
+#test-results thead {
+	background-color: #CCC;
+}
+
+#test-results .case-description {
+	text-align: left;
+}
+
+#test-results th, #test-results td {
+	padding: 5px 0;
+}
+
+#test-results .status-success {
+	color: #269926;
+}
+
+#test-results .status-unknown {
+	color: #999;
+}
+
+#test-results .status-failed, #test-results .status-error {
+	color: #BF3030;
+}
+
+
+#test-results .status-executing img {
+	width: 16px;
+}
+
+.controls {
+	float: right;
+}*/

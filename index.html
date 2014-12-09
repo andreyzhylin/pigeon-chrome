@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="">
+<head>
+	<!-- <title>Pigeon - notifications manager</title> -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8"> 
+
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<script type="text/javascript" src="js/vendor/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="js/vendor/angular.min.js"></script>
+	<script type="text/javascript" src="js/pigeon.js"></script>
+	<script type="text/javascript" src="js/tests.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+	
+</head>
+<body ng-controller="testController">
+	<div id="wrapper" class="container">
+		<div id="header">
+			<!-- <h1>Web page keyboard navigator</h1> -->
+			<div class="controls">
+				<input id="hide-success" type="checkbox"> Hide success tests
+			</div>
+		</div>
+		<div id="content">
+			<table id="test-results">
+				<thead>
+				<tr>
+					<th>Description</th>
+					<th>Status</th>
+					<th><a href="javascript:void(0)" class="command-refresh-all">Refresh All</a></th>
+					<th>Link</th>
+				</tr>
+				</thead>
+			</table>
+		</div>
+		<div id="footer">
+		</div>
+	</div>
+</body>
+</html>
