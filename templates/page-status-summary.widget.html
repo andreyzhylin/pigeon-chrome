@@ -1,0 +1,5 @@
+<span class="status-success">{{ page.countTests(mainCtrl.STATUS_SUCCESS) }}</span>
+<span class="divider"> / </span> 
+<span class="status-failed">{{ page.countTests(mainCtrl.STATUS_FAILED) + page.countTests(mainCtrl.STATUS_ERROR) }}</span>
+<span class="divider"> / </span>
+<span class="status-unknown">{{ page.countTests(mainCtrl.STATUS_UNKNOWN) }}</span>

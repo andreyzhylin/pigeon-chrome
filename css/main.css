@@ -1,44 +1,35 @@
-/*#wrapper {
-	width: 980px;
-	margin: 0 auto;
-	font-family: Helvetica;
-	font-size: 16px;
-}
-
-#test-results {
-	width: 100%;
-	text-align: center;
-}
-
-#test-results thead {
-	background-color: #CCC;
-}
-
-#test-results .case-description {
-	text-align: left;
-}
-
-#test-results th, #test-results td {
-	padding: 5px 0;
-}
-
-#test-results .status-success {
+.status-success {
 	color: #269926;
 }
 
-#test-results .status-unknown {
+.status-unknown {
 	color: #999;
 }
 
-#test-results .status-failed, #test-results .status-error {
+.status-failed, .status-error {
 	color: #BF3030;
 }
 
+.ng-dirty.ng-invalid {
+	border-color: #a94442;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+} 
 
-#test-results .status-executing img {
-	width: 16px;
+.ng-dirty.ng-valid {
+	border-color: #3c763d;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+} 
+
+.top-buffer {
+	margin-top: 20px;
 }
 
-.controls {
-	float: right;
-}*/
+.glyphicon {
+	cursor: pointer;
+}
+
+table td img.loader {
+	width: 16px;
+}

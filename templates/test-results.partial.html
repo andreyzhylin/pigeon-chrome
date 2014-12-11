@@ -1,0 +1,40 @@
+<div class="pull-left">
+	<a href="#/addPage" class="btn btn-default"><span icon="plus"></span> Add page</a>
+</div>
+<div class="pull-right">
+	<div class="checkbox">
+		<label>
+			<input ng-model="mainCtrl.shouldHideSuccess" type="checkbox"> Hide success tests
+		</label>
+	</div>
+</div>
+<table class="table">
+	<thead>
+	<tr>
+		<th>Description</th>
+		<th>Status</th>
+		<th><span ng-click="mainCtrl.refreshAll()" icon="refresh"></span></th>
+		<th>Link</th> 
+	</tr>
+	</thead>
+	<tbody ng-repeat="page in mainCtrl.pages">
+		<tr>
+			<th>{{ page.description }}</th>
+			<th>
+				<page-status-summary></page-status-summary>
+			</th>
+			<th><span ng-click="mainCtrl.refreshPage(page)" icon="refresh"></span></th>
+			<th><a href="{{ page.url }}" target="_blank" icon="new-window"></a></th>
+		</tr>
+		<tr ng-repeat="test in page.tests" ng-hide="mainCtrl.shouldHideTest(test)">
+			<td>{{ test.description }}</td>
+			<td>
+				<span ng-class="mainCtrl.getStatusCssClass(test.status)" ng-hide="test.isExecuting">{{ mainCtrl.getStatusName(test.status) }}</span>
+				<img ng-show="test.isExecuting" src="/img/loader.gif" class="loader">
+			</td>
+			<td><span ng-click="mainCtrl.refreshTest(test)" icon="refresh"></span></td>
+			<td></td>
+		</tr>
+	</tbody>
+	{{ hideSuccess }}
+</table>
