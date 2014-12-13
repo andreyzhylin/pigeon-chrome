@@ -37,11 +37,14 @@
 	      		otherwise({
 	        		redirectTo: '/pages'
 	      		});
-	  	}]);
+	  	}
+	]);
+
 	app.config(['$compileProvider',
 	    function($compileProvider) {   
 	        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
-		}]);
+		}
+	]);
 
 	// Bootstrap
 	angular.element(document).ready(function() {

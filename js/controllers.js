@@ -21,13 +21,13 @@ pigeonControllers.controller('MainController', ['$scope', function($scope) {
 
 	this.countTests = function(page, status) {
 		var count = 0;
-		for (var i = 0; i < page.tests.length; i++) {
-			if (page.tests[i].status === status) {
+		angular.forEach(page.tests, function(test, index) {
+			if (test.status === status) {
 				count++;
 			}
-		}
+		});
 		return count;
-	}
+	};
 
 	this.getStatusCssClass = function(status) {
 		return this.statusCssClasses[status];
@@ -50,25 +50,22 @@ pigeonControllers.controller('MainController', ['$scope', function($scope) {
 	};
 
 	this.refreshTest = function(test) {
-		test.status = this.statuses.UNKNOWN;
-		test.isExecuting = true;
 		pigeon.execute(test, this.testCompleteCallback);
 	};
 
 	this.refreshPage = function(page) {
-		for (var i = 0; i < page.tests.length; i++) {
-			this.refreshTest(page.tests[i]);
-		}
+		angular.forEach(page.tests, function(test, index) {
+			this.refreshTest(test);
+		}, this);
 	};
 
 	this.refreshAll = function() {
-		for (var i = 0; i < this.pages.length; i++) {
-			this.refreshPage(this.pages[i]);
-		}
+		angular.forEach(this.pages, function(page, index) {
+			this.refreshPage(page);
+		}, this);
 	};
 
 	this.testCompleteCallback = function(test) {
-		test.isExecuting = false;
 		$scope.$apply();
 	};
 } ]);
@@ -76,20 +73,18 @@ pigeonControllers.controller('MainController', ['$scope', function($scope) {
 // Page Controller
 pigeonControllers.controller('PageController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
 	this.page = {};
-	if (typeof $routeParams.pageIndex !== 'undefined') {
+	if (angular.isDefined($routeParams.pageIndex)) {
 		var editPage = pigeon.storage.getPage($routeParams.pageIndex);
 		this.page.description = editPage.description;
 		this.page.url = editPage.url;
 	}
 
 	this.savePage = function() {
-		if (typeof $routeParams.pageIndex === 'undefined') {
-			pigeon.storage.addPage(this.page);
-		} else {
+		if (angular.isDefined($routeParams.pageIndex)) {
 			pigeon.storage.editPage(this.page, $routeParams.pageIndex);
+		} else {
+			pigeon.storage.addPage(this.page);
 		}
-		
-		this.page = {};
 		$location.path('/');
 	};
 } ]);
@@ -97,20 +92,18 @@ pigeonControllers.controller('PageController', ['$scope', '$routeParams', '$loca
 // Test Controller
 pigeonControllers.controller('TestController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
 	this.test = {};
-	if (typeof $routeParams.testIndex !== 'undefined') {
+	if (angular.isDefined($routeParams.testIndex)) {
 		var editTest = pigeon.storage.getTest($routeParams.pageIndex, $routeParams.testIndex);
 		this.test.description = editTest.description;
 		this.test.code = editTest.code.toString();
 	}
 
 	this.saveTest = function() {
-		if (typeof $routeParams.testIndex === 'undefined') {
-			pigeon.storage.addTest(this.test, $routeParams.pageIndex);
-		} else {
+		if (angular.isDefined($routeParams.testIndex)) {
 			pigeon.storage.editTest(this.test, $routeParams.pageIndex, $routeParams.testIndex);
+		} else {
+			pigeon.storage.addTest(this.test, $routeParams.pageIndex);
 		}
-		
-		this.test = {};
 		$location.path('/');
 	};
 } ]);

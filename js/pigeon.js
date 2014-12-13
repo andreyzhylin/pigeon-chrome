@@ -6,7 +6,8 @@ var pigeon = (function() {
 		ERROR: "ERROR"
 	};
 
-	var GOOGLE_STORAGE_PAGES_KEY = 'PAGES';
+	var STORAGE_PAGES_KEY = 'PAGES';
+	var browserService = chromeService;
 
 	/**
 	 * @description
@@ -49,33 +50,30 @@ var pigeon = (function() {
 
 	/**
 	 * @description
-	 * Opens chrome tab, executes code, changes status depends on result.
+	 * Opens browser tab, executes code, changes status depends on result.
 	 *
 	 * @param {object} test Test to execute
 	 * @param {Function} callback Function to execute after the test
 	 */
 	var execute = function(test, callback) {
-		(function(self) {
-			chrome.tabs.create({ url:test.page.url, active: false }, function(tab) {
-				chrome.tabs.executeScript(tab.id, { code: prepareCode(test.code) }, function(result) {
-					chrome.tabs.remove(tab.id);
-					test.status = !isBoolean(result[0]) ? self.statuses.ERROR : 
-						result[0] ? self.statuses.SUCCESS : self.statuses.FAILED;
-					(callback || self.noop)(test);
-				});
-			});
-		})(this);
+		test.status = this.statuses.UNKNOWN;
+		test.isExecuting = true;
+		browserService.executeScript(test.page.url, prepareCode(test.code), function(result) {
+			test.status = !isBoolean(result[0]) ? statuses.ERROR : 
+				result[0] ? statuses.SUCCESS : statuses.FAILED;
+			test.isExecuting = false;
+			(callback || noop)(test);
+		});
 	};
 
 	/**
 	 * @description
-	 * Storage object contains CRUD functions and communicates with Chrome storage API.
+	 * Storage object contains CRUD functions and communicates with browser storage API.
 	 *
-	 * @property {object} storageArea Chrome storage object
+	 * @property {object} storageArea Browser storage object
 	 * @property {array} pages Array of pages
 	 */
 	var storage = {
-		storageArea: chrome.storage.local,
 		pages: [],
 
 		/**
@@ -84,7 +82,7 @@ var pigeon = (function() {
 		 */
 		saveData: function() {
 			var data = {};
-			data[GOOGLE_STORAGE_PAGES_KEY] = JSON.stringify(this.pages, function(key, value) {
+			data[STORAGE_PAGES_KEY] = JSON.stringify(this.pages, function(key, value) {
 				// Pages array has circular structure, we should remove link to pages, to save JSON data
 				if (key === 'page') {
 					return undefined;
@@ -92,7 +90,7 @@ var pigeon = (function() {
 					return value;
 				}
 			});
-			this.storageArea.set(data);
+			browserService.saveData(data);
 		},
 
 		/**
@@ -118,7 +116,7 @@ var pigeon = (function() {
 
 		/**
 		 * @description
-		 * Adds page to array and refreshes chrome storage.
+		 * Adds page to array and refreshes browser storage.
 		 * 
 		 * @param  {object} page Page to add
 		 */
@@ -129,7 +127,7 @@ var pigeon = (function() {
 
 		/**
 		 * @description
-		 * Edits page to array and refreshes chrome storage.
+		 * Edits page to array and refreshes browser storage.
 		 * 
 		 * @param  {object} page Page to edit
 		 * @param  {object} pageIndex Page index in array
@@ -142,7 +140,7 @@ var pigeon = (function() {
 
 		/**
 		 * @description
-		 * Removes page to array and refreshes chrome storage.
+		 * Removes page to array and refreshes browser storage.
 		 * 
 		 * @param  {object} page Page to remove
 		 */
@@ -166,7 +164,7 @@ var pigeon = (function() {
 
 		/**
 		 * @description
-		 * Adds test to array and refreshes chrome storage.
+		 * Adds test to array and refreshes browser storage.
 		 * 
 		 * @param  {object} test Test to add
 		 * @param  {number} pageIndex Index of page which test belongs to
@@ -181,7 +179,7 @@ var pigeon = (function() {
 
 		/**
 		 * @description
-		 * Edits test to array and refreshes chrome storage
+		 * Edits test to array and refreshes browser storage
 		 * 
 		 * @param  {object} test Test to edit
 		 * @param  {number} pageIndex Index of page which test belongs to
@@ -210,20 +208,18 @@ var pigeon = (function() {
 		}
 	};
 
-	// Load pages from chrome storage
-	(function(localStorage) {
-		localStorage.storageArea.get(GOOGLE_STORAGE_PAGES_KEY, function(data) {
-			if (isDefined(data[GOOGLE_STORAGE_PAGES_KEY])) {
-				localStorage.pages = JSON.parse(data[GOOGLE_STORAGE_PAGES_KEY]);
-				// Return links to pages after load
-				for (var i = 0; i < localStorage.pages.length; i++) {
-					for (var j = 0; j < localStorage.pages[i].tests.length; j++) {
-						localStorage.pages[i].tests[j].page = localStorage.pages[i];
-					}
+	// Load pages from browser storage
+	browserService.loadData(STORAGE_PAGES_KEY, function(data) {
+		if (isDefined(data[STORAGE_PAGES_KEY])) {
+			storage.pages = JSON.parse(data[STORAGE_PAGES_KEY]);
+			// Return links to pages after load
+			for (var i = 0; i < storage.pages.length; i++) {
+				for (var j = 0; j < storage.pages[i].tests.length; j++) {
+					storage.pages[i].tests[j].page = storage.pages[i];
 				}
 			}
-	    });
-	})(storage);
+		}
+	});
 
 	return {
 		statuses: statuses,
