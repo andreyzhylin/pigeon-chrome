@@ -2,7 +2,7 @@ var pigeonDirectives = angular.module('pigeonDirectives', []);
 
 pigeonDirectives.directive('icon', function() {
 	var linkFunction = function(scope, element, attributes) {
-	    scope.name = attributes["icon"];
+	    scope.name = attributes.icon;
 	};
 	return {
 		restrict: 'A',

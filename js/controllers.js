@@ -5,53 +5,67 @@ pigeonControllers.controller('MainController', ['$scope', function($scope) {
 	this.shouldHideSuccess = false;
 
 	this.pages = pigeon.storage.getPages();
-
-	this.STATUS_UNKNOWN = pigeon.STATUS_UNKNOWN;
-	this.STATUS_SUCCESS = pigeon.STATUS_SUCCESS;
-	this.STATUS_FAILED = pigeon.STATUS_FAILED;
-	this.STATUS_ERROR = pigeon.STATUS_ERROR;
+	this.statuses = pigeon.statuses;
 
 	this.statusCssClasses = [];
-	this.statusCssClasses[this.STATUS_UNKNOWN] = 'status-unknown';
-	this.statusCssClasses[this.STATUS_SUCCESS] = 'status-success';
-	this.statusCssClasses[this.STATUS_FAILED] = 'status-failed';
-	this.statusCssClasses[this.STATUS_ERROR] = 'status-error';
+	this.statusCssClasses[this.statuses.UNKNOWN] = 'status-unknown';
+	this.statusCssClasses[this.statuses.SUCCESS] = 'status-success';
+	this.statusCssClasses[this.statuses.FAILED] = 'status-failed';
+	this.statusCssClasses[this.statuses.ERROR] = 'status-error';
 
 	this.statusNames = [];
-	this.statusNames[this.STATUS_UNKNOWN] = 'UNKNOWN';
-	this.statusNames[this.STATUS_SUCCESS] = 'SUCCESS';
-	this.statusNames[this.STATUS_FAILED] = 'FAILED';
-	this.statusNames[this.STATUS_ERROR] = 'ERROR';
+	this.statusNames[this.statuses.UNKNOWN] = 'UNKNOWN';
+	this.statusNames[this.statuses.SUCCESS] = 'SUCCESS';
+	this.statusNames[this.statuses.FAILED] = 'FAILED';
+	this.statusNames[this.statuses.ERROR] = 'ERROR';
+
+	this.countTests = function(page, status) {
+		var count = 0;
+		for (var i = 0; i < page.tests.length; i++) {
+			if (page.tests[i].status === status) {
+				count++;
+			}
+		}
+		return count;
+	}
 
 	this.getStatusCssClass = function(status) {
 		return this.statusCssClasses[status];
-	}
+	};
 
 	this.getStatusName = function(status) {
 		return this.statusNames[status];
-	}
+	};
 
 	this.shouldHideTest = function(test) {
-		return (test.status === this.STATUS_SUCCESS) && this.shouldHideSuccess;
-	}
+		return (test.status === this.statuses.SUCCESS) && this.shouldHideSuccess;
+	};
+
+	this.removeTest = function(test) {
+		pigeon.storage.removeTest(test);
+	};
+
+	this.removePage = function(page) {
+		pigeon.storage.removePage(page);
+	};
 
 	this.refreshTest = function(test) {
-		test.status = this.STATUS_UNKNOWN;
+		test.status = this.statuses.UNKNOWN;
 		test.isExecuting = true;
-		test.execute(this.testCompleteCallback);
-	}
+		pigeon.execute(test, this.testCompleteCallback);
+	};
 
 	this.refreshPage = function(page) {
 		for (var i = 0; i < page.tests.length; i++) {
 			this.refreshTest(page.tests[i]);
 		}
-	}
+	};
 
 	this.refreshAll = function() {
 		for (var i = 0; i < this.pages.length; i++) {
 			this.refreshPage(this.pages[i]);
 		}
-	}
+	};
 
 	this.testCompleteCallback = function(test) {
 		test.isExecuting = false;
@@ -60,20 +74,43 @@ pigeonControllers.controller('MainController', ['$scope', function($scope) {
 } ]);
 
 // Page Controller
-pigeonControllers.controller('PageController', function() {
+pigeonControllers.controller('PageController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
 	this.page = {};
+	if (typeof $routeParams.pageIndex !== 'undefined') {
+		var editPage = pigeon.storage.getPage($routeParams.pageIndex);
+		this.page.description = editPage.description;
+		this.page.url = editPage.url;
+	}
 
-	this.addPage = function() {
-		// TODO
-		if (this.page.description === undefined ||
-			this.page.description == '') {
-			this.page.description = this.page.url;
+	this.savePage = function() {
+		if (typeof $routeParams.pageIndex === 'undefined') {
+			pigeon.storage.addPage(this.page);
+		} else {
+			pigeon.storage.editPage(this.page, $routeParams.pageIndex);
 		}
-		if (!/^https?:\/\//i.test(this.page.url)) {
-		    this.page.url = 'http://' + this.page.url;
-		}
-		this.page.tests = [];
-		pigeon.storage.addPage(this.page);
+		
 		this.page = {};
+		$location.path('/');
 	};
-});
+} ]);
+
+// Test Controller
+pigeonControllers.controller('TestController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
+	this.test = {};
+	if (typeof $routeParams.testIndex !== 'undefined') {
+		var editTest = pigeon.storage.getTest($routeParams.pageIndex, $routeParams.testIndex);
+		this.test.description = editTest.description;
+		this.test.code = editTest.code.toString();
+	}
+
+	this.saveTest = function() {
+		if (typeof $routeParams.testIndex === 'undefined') {
+			pigeon.storage.addTest(this.test, $routeParams.pageIndex);
+		} else {
+			pigeon.storage.editTest(this.test, $routeParams.pageIndex, $routeParams.testIndex);
+		}
+		
+		this.test = {};
+		$location.path('/');
+	};
+} ]);

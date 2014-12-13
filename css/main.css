@@ -33,3 +33,13 @@
 table td img.loader {
 	width: 16px;
 }
+
+table tr td, table tr th {
+	text-align: center;
+}
+
+table tr td:first-child, table tr th:first-child {
+	text-align: left;
+}
+
+table tr:first-child th;
