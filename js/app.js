@@ -1,6 +1,7 @@
 (function() {
 	var app = angular.module('pigeonApp', [
 		'ngRoute',
+		//'ngMessages',
 		'ui.bootstrap',
 		'pigeonControllers',
 		'pigeonDirectives'

@@ -1,3 +1,43 @@
+var data = [
+	{
+		description: '0 page',
+		url: '0 url',
+		tests: [
+			{
+				description: '0.0 test',
+				code: 'return true;',
+				status: 'SUCCESS'
+			},
+			{
+				description: '0.1 test',
+				code: 'return false;',
+				status: 'FAILED'
+			},
+			{
+				description: '0.2 test',
+				code: 'return 42;',
+				status: 'ERROR'
+			},
+			{
+				description: '0.3 test',
+				code: '0.3 code',
+				status: 'ERROR'
+			}
+		]
+	},
+	{
+		description: '1 page',
+		url: '1 url',
+		tests: [
+			{
+				description: '1.0 test',
+				code: '1.0 code',
+				status: 'UNKNOWN'
+			}
+		]		
+	}
+]
+
 chrome.storage = {
 	local: {
 		data: [],
@@ -9,7 +49,7 @@ chrome.storage = {
 		}
 	}
 };
-chrome.storage.local.data['PAGES'] = '[{"description":"Page1","url":"","tests":[{"description":"Test1","code":"","status":"ERROR","isExecuting":false}]}]';
+chrome.storage.local.data['PAGES'] = JSON.stringify(data);
 
 chrome.tabs = {
 	create: function(options, callback) {

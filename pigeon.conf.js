@@ -18,9 +18,10 @@ module.exports = function(config) {
         'js/vendor/angular.min.js',
         'js/vendor/angular-route.min.js',
         'js/vendor/angular-mocks.js',
+        'js/vendor/ui-bootstrap-tpls-0.12.0.min.js',
         'test/chrome.mock.js',
         'js/*.js',
-        'test/*.test.js'
+        'test/*Spec.js'
     ],
 
 
