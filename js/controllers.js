@@ -50,19 +50,15 @@ pigeonControllers.controller('MainController', ['$scope', function($scope) {
 	};
 
 	this.refreshTest = function(test) {
-		pigeon.execute(test, this.testCompleteCallback);
+		pigeon.executeTest(test, this.testCompleteCallback);
 	};
 
 	this.refreshPage = function(page) {
-		angular.forEach(page.tests, function(test, index) {
-			this.refreshTest(test);
-		}, this);
+		pigeon.executePage(page, this.testCompleteCallback);
 	};
 
 	this.refreshAll = function() {
-		angular.forEach(this.pages, function(page, index) {
-			this.refreshPage(page);
-		}, this);
+		pigeon.executeAll(this.testCompleteCallback);
 	};
 
 	this.testCompleteCallback = function(test) {

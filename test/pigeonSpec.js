@@ -1,35 +1,35 @@
-describe("Pigeon execute method", function() {
+describe("Pigeon executeTest method", function() {
 	beforeEach(function() {
 		this.page = pigeon.storage.getPages()[0];
 	});
 
   	it("should be defined and public", function() {
-    	expect(pigeon.execute).toBeDefined();
+    	expect(pigeon.executeTest).toBeDefined();
   	});
 
   	it("should allow execution without callback function", function() {
   		var test = this.page.tests[0];
-  		pigeon.execute(test);
+  		pigeon.executeTest(test);
   	});
 
   	it("should correctly set success status", function() {
   		var successTest = this.page.tests[0];
   		successTest.status = pigeon.statuses.UNKNOWN;
-  		pigeon.execute(successTest);
+  		pigeon.executeTest(successTest);
   		expect(successTest.status).toBe(pigeon.statuses.SUCCESS);
   	});
 
   	it("should correctly set failed status", function() {
   		var failedTest = this.page.tests[1];
   		failedTest.status = pigeon.statuses.UNKNOWN;
-  		pigeon.execute(failedTest);
+  		pigeon.executeTest(failedTest);
   		expect(failedTest.status).toBe(pigeon.statuses.FAILED);
   	});
 
   	it("should correctly set error status", function() {
   		var errorTest = this.page.tests[2];
   		errorTest.status = pigeon.statuses.UNKNOWN;
-  		pigeon.execute(errorTest);
+  		pigeon.executeTest(errorTest);
   		expect(errorTest.status).toBe(pigeon.statuses.ERROR);
   	});
 });

@@ -13,7 +13,7 @@ var pigeon = (function() {
 	 * @description
 	 * Determines if a reference is boolean.
 	 *
-	 * @param {*} value Reference to check.
+	 * @param   {*} value Reference to check.
 	 * @returns {boolean} True if `value` is boolean.
 	 */
 	function isBoolean(value) {
@@ -24,7 +24,7 @@ var pigeon = (function() {
 	 * @description
 	 * Determines if a reference is defined.
 	 *
-	 * @param {*} value Reference to check.
+	 * @param   {*} value Reference to check.
 	 * @returns {boolean} True if `value` is defined.
 	 */
 	function isDefined(value) {
@@ -42,7 +42,7 @@ var pigeon = (function() {
 	 * Prepares test code to execution.
 	 * 
 	 * @param  {string} code Code to prepare
-	 * @return {string} Prepared code
+	 * @return {string}      Prepared code
 	 */
 	function prepareCode(code) {
 		return '(function() {' + code + '})()';
@@ -50,15 +50,14 @@ var pigeon = (function() {
 
 	/**
 	 * @description
-	 * Opens browser tab, executes code, changes status depends on result.
+	 * Helper function that just executes one test
 	 *
-	 * @param {object} test Test to execute
-	 * @param {Function} callback Function to execute after the test
+	 * @param {number}   tabId    Browser tab id
+	 * @param {object}   test     Test to execute
+	 * @param {Function} callback Callback function
 	 */
-	var execute = function(test, callback) {
-		test.status = this.statuses.UNKNOWN;
-		test.isExecuting = true;
-		browserService.executeScript(test.page.url, prepareCode(test.code), function(result) {
+	var executeOne = function(tabId, test, callback) {
+		browserService.executeScript(tabId, prepareCode(test.code), function(result) {
 			test.status = !isBoolean(result[0]) ? statuses.ERROR : 
 				result[0] ? statuses.SUCCESS : statuses.FAILED;
 			test.isExecuting = false;
@@ -68,10 +67,72 @@ var pigeon = (function() {
 
 	/**
 	 * @description
+	 * Opens browser tab, executes code of specified test, changes status depends on result.
+	 *
+	 * @param {object}   test     Test to execute
+	 * @param {Function} callback Function to execute after the test
+	 */
+	var executeTest = function(test, callback) {
+		if (test.isExecuting) {
+			return;
+		}
+		test.status = this.statuses.UNKNOWN;
+		test.isExecuting = true;
+		browserService.openPage(test.page.url, function(tabId) {
+			executeOne(tabId, test, function() {
+				browserService.closePage(tabId);
+				(callback || noop)(test);
+			});
+		});
+	};
+
+	/**
+	 * @description
+	 * Opens browser tab, executes code of all tests, changes status depends on result.
+	 *
+	 * @param {object}   page     Page to execute
+	 * @param {Function} callback Function to execute after the test
+	 */
+	var executePage = function(page, callback) {
+		for (var i = 0; i < page.tests.length; i++) {
+			page.tests[i].status = pigeon.statuses.UNKNOWN;
+			page.tests[i].isExecuting = true;
+		}
+		browserService.openPage(page.url, function(tabId) {
+			for (var i = 0; i < page.tests.length; i++) {
+				executeOne(tabId, page.tests[i], callback);
+			}
+			var closePageInterval = setInterval(function() {
+				for (var i = 0; i < page.tests.length; i++) {
+					if (page.tests[i].isExecuting) {
+						return;
+					}
+				}
+				browserService.closePage(tabId);
+				clearInterval(closePageInterval);
+			}, 100);
+			
+		});
+	};
+
+	/**
+	 * @description
+	 * Opens browser tabs for all pages, executes code of all tests, changes status depends on result.
+	 *
+	 * @param {Function} callback Function to execute after the test
+	 */
+	var executeAll = function(callback) {
+		for (var i = 0; i < storage.pages.length; i++) {
+			executePage(storage.pages[i], callback);
+		}	
+	};
+
+	/**
+	 * @description
 	 * Storage object contains CRUD functions and communicates with browser storage API.
 	 *
 	 * @property {object} storageArea Browser storage object
-	 * @property {array} pages Array of pages
+	 * @property {array}  pages       Array of pages
 	 */
 	var storage = {
 		pages: [],
@@ -107,8 +168,8 @@ var pigeon = (function() {
 		 * @description
 		 * Returns page by index.
 		 * 
-		 * @param  {number} pageIndex Page index in array
-		 * @returns {object} Page object
+		 * @param   {number} pageIndex Page index in array
+		 * @returns {object}           Page object
 		 */
 		getPage: function(pageIndex) {
 			return this.pages[pageIndex];
@@ -118,7 +179,7 @@ var pigeon = (function() {
 		 * @description
 		 * Adds page to array and refreshes browser storage.
 		 * 
-		 * @param  {object} page Page to add
+		 * @param {object} page Page to add
 		 */
 		addPage: function(page) {
 			this.pages.push(page);
@@ -129,8 +190,8 @@ var pigeon = (function() {
 		 * @description
 		 * Edits page to array and refreshes browser storage.
 		 * 
-		 * @param  {object} page Page to edit
-		 * @param  {object} pageIndex Page index in array
+		 * @param {object} page      New page data
+		 * @param {object} pageIndex Page index in array
 		 */
 		editPage: function(page, pageIndex) {
 			this.pages[pageIndex].description = page.description;
@@ -142,7 +203,7 @@ var pigeon = (function() {
 		 * @description
 		 * Removes page to array and refreshes browser storage.
 		 * 
-		 * @param  {object} page Page to remove
+		 * @param {object} page Page to remove
 		 */
 		removePage: function(page) {
 			var index = this.pages.indexOf(page);
@@ -154,9 +215,9 @@ var pigeon = (function() {
 		 * @description
 		 * Returns test by index and page index.
 		 * 
-		 * @param  {number} Page index in array
-		 * @param  {number} Test index in page array
-		 * @returns {object} Test object
+		 * @param   {number} pageIndex Page index in array
+		 * @param   {number} testIndex Test index in page array
+		 * @returns {object}           Test object
 		 */
 		getTest: function(pageIndex, testIndex) {
 			return this.pages[pageIndex].tests[testIndex];
@@ -166,8 +227,8 @@ var pigeon = (function() {
 		 * @description
 		 * Adds test to array and refreshes browser storage.
 		 * 
-		 * @param  {object} test Test to add
-		 * @param  {number} pageIndex Index of page which test belongs to
+		 * @param {object} test      Test to add
+		 * @param {number} pageIndex Index of page which test belongs to
 		 */
 		addTest: function(test, pageIndex) {
 			test.status = statuses.UNKNOWN;
@@ -181,9 +242,9 @@ var pigeon = (function() {
 		 * @description
 		 * Edits test to array and refreshes browser storage
 		 * 
-		 * @param  {object} test Test to edit
-		 * @param  {number} pageIndex Index of page which test belongs to
-		 * @param  {number} testIndex Test index in page array
+		 * @param {object} test      New test data
+		 * @param {number} pageIndex Index of page which test belongs to
+		 * @param {number} testIndex Test index in page array
 		 */
 		editTest: function(test, pageIndex, testIndex) {
 			this.pages[pageIndex].tests[testIndex].description = test.description;
@@ -198,7 +259,7 @@ var pigeon = (function() {
 		 * @description
 		 * Removes test
 		 * 
-		 * @param  {object} test Test to remove
+		 * @param {object} test Test to remove
 		 */
 		removeTest: function(test) {
 			var pageIndex = this.pages.indexOf(test.page);
@@ -224,7 +285,9 @@ var pigeon = (function() {
 	return {
 		statuses: statuses,
 		storage: storage,
-		execute: execute
+		executeTest: executeTest,
+		executePage: executePage,
+		executeAll: executeAll
 	};
 })();
 

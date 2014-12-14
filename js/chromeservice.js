@@ -1,18 +1,36 @@
 var chromeService = {
+
+	/**
+	 * @description
+	 * Opens chrome tab
+	 * 
+	 * @param  {string} url Page url
+	 */
+	openPage: function(url, callback) {
+		chrome.tabs.create({ url:url, active: false }, function(tab) {
+			callback(tab.id);
+		});
+	},
+	/**
+	 * @description
+	 * Closes chrome tab
+	 * 
+	 * @param  {number} tabId Tab id
+	 */
+	closePage: function(tabId) {
+		chrome.tabs.remove(tabId);
+	},
 	/**
 	 * @description
 	 * Opens chrome tab, executes code, executes callback function
 	 *
-	 * @param {string} test Test to execute
+	 * @param {string} tabId Id of tab where should execute script ( returns by openPage() )
 	 * @param {string} code Code to execute
 	 * @param {Function} callback Function to execute after executing
 	 */
-	executeScript: function(url, code, callback) {
-		chrome.tabs.create({ url:url, active: false }, function(tab) {
-			chrome.tabs.executeScript(tab.id, { code: code }, function(result) {
-				chrome.tabs.remove(tab.id);
-				callback(result);
-			});
+	executeScript: function(tabId, code, callback) {
+		chrome.tabs.executeScript(tabId, { code: code }, function(result) {
+			callback(result);
 		});
 	},
 
