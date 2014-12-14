@@ -5,11 +5,18 @@
 	<form ng-submit="testForm.$valid && testCtrl.saveTest()" role="form" name="testForm" novalidate>
   		<div class="form-group">
     		<label>Test description</label>
-    		<input ng-model="testCtrl.test.description" type="text" class="form-control" placeholder="Test description" required>
+    		<input ng-model="testCtrl.test.description" type="text" class="form-control" placeholder="Test description" name="testDescription" required>
+        <div ng-messages="testForm.testDescription.$error" class="help-block validation-message">
+          <div ng-message="required">You did not enter test description.</div>
+        </div>
   		</div>
   		<div class="form-group">
     		<label>Test code</label>
-        <textarea ng-model="testCtrl.test.code" class="form-control" rows="5" required></textarea>
+        <textarea ng-model="testCtrl.test.code" class="form-control" rows="5" name="testCode" required should-return></textarea>
+        <div ng-messages="testForm.testCode.$error" class="help-block validation-message">
+          <div ng-message="required">You did not enter test code.</div>
+          <div ng-message="shouldReturn">Your code should return boolean value.</div>
+        </div>
   		</div>
   		<input type="submit" class="btn btn-default" value="Submit">
 	</form>

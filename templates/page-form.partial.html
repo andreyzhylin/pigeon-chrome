@@ -6,11 +6,14 @@
   		<div class="form-group">
     		<label>Page description</label>
     		<input ng-model="pageCtrl.page.description" type="text" class="form-control" placeholder="Page description" name="pageDescription">
-        <span class='help-block validation-message'>{{ pageForm.pageUrl.$error | json }}</span>
   		</div>
   		<div class="form-group">
     		<label>Page URL</label>
-    		<input ng-model="pageCtrl.page.url" type="url" class="form-control" placeholder="http://www.example.com" name="pageUrl" required>
+    		<input ng-model="pageCtrl.page.url" type="url" class="form-control" placeholder="http://www.example.com" name="pageUrl" required fix-url>
+        <div ng-messages="pageForm.pageUrl.$error" class="help-block validation-message">
+          <div ng-message="required">You did not enter URL.</div>
+          <div ng-message="url">Not a valid URL.</div>
+        </div>
   		</div>
   		<input type="submit" class="btn btn-default" value="Submit">
 	</form>

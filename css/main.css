@@ -42,6 +42,6 @@ table tr td:first-child, table tr th:first-child {
 	text-align: left;
 }
 
-span.validation-message {
+.help-block.validation-message {
 	color: #a94442;
 }

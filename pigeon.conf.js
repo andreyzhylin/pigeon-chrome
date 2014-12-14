@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
         'js/vendor/angular.min.js',
         'js/vendor/angular-route.min.js',
+        'js/vendor/angular-messages.min.js',
         'js/vendor/angular-mocks.js',
         'js/vendor/ui-bootstrap-tpls-0.12.0.min.js',
         'test/chrome.mock.js',
