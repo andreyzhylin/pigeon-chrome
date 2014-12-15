@@ -34,14 +34,21 @@ describe("Pigeon executeTest method", function() {
   	});
 });
 
+describe("Pigeon executePage method", function() {
+	beforeEach(function() {
+		this.page = pigeon.storage.getPages()[0];
+	});
+
+	it("should execute all tests on page", function() {
+		var callback = jasmine.createSpy('callback');
+		pigeon.executePage(this.page, callback);
+		expect(callback.calls.count()).toEqual(this.page.tests.length);
+	});
+})
+
 describe("Pigeon storage", function() {
 	beforeEach(function() {
 		this.pages = pigeon.storage.getPages();
-	});
-
-	it("should load data from browser storage", function() {
-		expect(this.pages[0].description).toBe('0 page');
-		expect(this.pages[0].tests[0].description).toBe('0.0 test');
 	});
 
 	it("should set page links to tests", function() {
@@ -55,20 +62,24 @@ describe("Pigeon storage", function() {
 	it("should allow addition of tests", function() {
 		var test = {};
 		test.description = 'New test';
-		expect(this.pages[0].tests[this.pages[0].tests.length-1].description).not.toBe(test.description);
+		var lastTest = this.pages[0].tests[this.pages[0].tests.length-1];
+		expect(lastTest.description).not.toBe(test.description);
 		pigeon.storage.addTest(test, 0);
-		expect(this.pages[0].tests[this.pages[0].tests.length-1].description).toBe(test.description);
+		lastTest = this.pages[0].tests[this.pages[0].tests.length-1];
+		expect(lastTest.description).toBe(test.description);
 	});
 
 	it("should allow tests editing", function() {
 		var test = {};
 		test.description = 'New test';
 		test.code = 'New code';
-		expect(this.pages[1].tests[0].description).not.toBe(test.description);
-		expect(this.pages[1].tests[0].code).not.toBe(test.url);
+		var test1_0 = this.pages[1].tests[0];
+		expect(test1_0.description).not.toBe(test.description);
+		expect(test1_0.code).not.toBe(test.url);
 		pigeon.storage.editTest(test, 1, 0);
-		expect(this.pages[1].tests[0].description).toBe(test.description);
-		expect(this.pages[1].tests[0].code).toBe(test.code);
+		var test1_0 = this.pages[1].tests[0];
+		expect(test1_0.description).toBe(test.description);
+		expect(test1_0.code).toBe(test.code);
 	});
 
 	it("should allow deletion of tests", function() {
@@ -84,9 +95,11 @@ describe("Pigeon storage", function() {
 	it("should allow addition of pages", function() {
 		var page = {};
 		page.description = 'New page';
-		expect(this.pages[this.pages.length-1].description).not.toBe(page.description);
+		var lastPage = this.pages[this.pages.length-1];
+		expect(lastPage.description).not.toBe(page.description);
 		pigeon.storage.addPage(page);
-		expect(this.pages[this.pages.length-1].description).toBe(page.description);
+		lastPage = this.pages[this.pages.length-1];
+		expect(lastPage.description).toBe(page.description);
 	});
 
 	it("should allow pages editing", function() {

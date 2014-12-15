@@ -70,9 +70,7 @@ pigeonControllers.controller('MainController', ['$scope', function($scope) {
 pigeonControllers.controller('PageController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
 	this.page = {};
 	if (angular.isDefined($routeParams.pageIndex)) {
-		var editPage = pigeon.storage.getPage($routeParams.pageIndex);
-		this.page.description = editPage.description;
-		this.page.url = editPage.url;
+		this.page = angular.copy(pigeon.storage.getPage($routeParams.pageIndex));
 	}
 
 	this.savePage = function() {
@@ -89,9 +87,7 @@ pigeonControllers.controller('PageController', ['$scope', '$routeParams', '$loca
 pigeonControllers.controller('TestController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
 	this.test = {};
 	if (angular.isDefined($routeParams.testIndex)) {
-		var editTest = pigeon.storage.getTest($routeParams.pageIndex, $routeParams.testIndex);
-		this.test.description = editTest.description;
-		this.test.code = editTest.code.toString();
+		this.test = angular.copy(pigeon.storage.getTest($routeParams.pageIndex, $routeParams.testIndex));	
 	}
 
 	this.saveTest = function() {

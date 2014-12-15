@@ -7,6 +7,8 @@ var pigeon = (function() {
 	};
 
 	var STORAGE_PAGES_KEY = 'PAGES';
+	var CLOSE_PAGE_INTERVAL_TIME = 500;
+
 	var browserService = chromeService;
 
 	/**
@@ -46,6 +48,31 @@ var pigeon = (function() {
 	 */
 	function prepareCode(code) {
 		return '(function() {' + code + '})()';
+	}
+
+	/**
+	 * @param  {array}   array 
+	 * @param  {*} 	     obj   
+	 * @return {boolean} 	   Returns `true` if array includes obj, returns `false` otherwise 
+	 */
+	function includes(array, obj) {
+		return Array.prototype.indexOf.call(array, obj) != -1;
+	}
+
+	/**
+	 * @description
+	 * Removes value from array
+	 * 
+	 * @param  {array} 	array 
+	 * @param  {*} 		value 
+	 * @return {*} 			  Removed value
+	 */
+	function arrayRemove(array, value) {
+		var index = array.indexOf(value);
+		if (index >= 0) {
+			array.splice(index, 1);
+		}
+		return value;
 	}
 
 	/**
@@ -94,23 +121,29 @@ var pigeon = (function() {
 	 * @param {Function} callback Function to execute after the test
 	 */
 	var executePage = function(page, callback) {
-		for (var i = 0; i < page.tests.length; i++) {
-			page.tests[i].status = pigeon.statuses.UNKNOWN;
-			page.tests[i].isExecuting = true;
+		var isPageAlreadyExecuting = page.tests.every(function(test, index, array) {
+			return test.isExecuting;
+		});
+		if (isPageAlreadyExecuting) {
+			return;
 		}
+		page.tests.forEach(function(test, index, array) {
+			test.status = statuses.UNKNOWN;
+			test.isExecuting = true;
+		});
 		browserService.openPage(page.url, function(tabId) {
-			for (var i = 0; i < page.tests.length; i++) {
-				executeOne(tabId, page.tests[i], callback);
-			}
+			page.tests.forEach(function(test, index, array) {
+				executeOne(tabId, test, callback);
+			});
 			var closePageInterval = setInterval(function() {
-				for (var i = 0; i < page.tests.length; i++) {
-					if (page.tests[i].isExecuting) {
-						return;
-					}
+				var isFinished = page.tests.every(function(test, index, array) {
+					return !test.isExecuting;
+				});
+				if (isFinished) {
+					browserService.closePage(tabId);
+					clearInterval(closePageInterval);
 				}
-				browserService.closePage(tabId);
-				clearInterval(closePageInterval);
-			}, 100);
+			}, CLOSE_PAGE_INTERVAL_TIME);
 			
 		});
 	};
@@ -122,9 +155,9 @@ var pigeon = (function() {
 	 * @param {Function} callback Function to execute after the test
 	 */
 	var executeAll = function(callback) {
-		for (var i = 0; i < storage.pages.length; i++) {
+		storage.pages.forEach(function(page, index, array) {
 			executePage(storage.pages[i], callback);
-		}	
+		});
 	};
 
 	/**
@@ -145,11 +178,7 @@ var pigeon = (function() {
 			var data = {};
 			data[STORAGE_PAGES_KEY] = JSON.stringify(this.pages, function(key, value) {
 				// Pages array has circular structure, we should remove link to pages, to save JSON data
-				if (key === 'page') {
-					return undefined;
-				} else {
-					return value;
-				}
+				return key === 'page' ? undefined : value;
 			});
 			browserService.saveData(data);
 		},
@@ -206,8 +235,7 @@ var pigeon = (function() {
 		 * @param {object} page Page to remove
 		 */
 		removePage: function(page) {
-			var index = this.pages.indexOf(page);
-			this.pages.splice(index, 1);
+			arrayRemove(this.pages, page);
 			this.saveData();
 		},
 
@@ -263,8 +291,7 @@ var pigeon = (function() {
 		 */
 		removeTest: function(test) {
 			var pageIndex = this.pages.indexOf(test.page);
-			var testIndex = this.pages[pageIndex].tests.indexOf(test);
-			this.pages[pageIndex].tests.splice(testIndex, 1);
+			arrayRemove(this.pages[pageIndex].tests, test)
 			this.saveData();
 		}
 	};
@@ -274,11 +301,11 @@ var pigeon = (function() {
 		if (isDefined(data[STORAGE_PAGES_KEY])) {
 			storage.pages = JSON.parse(data[STORAGE_PAGES_KEY]);
 			// Return links to pages after load
-			for (var i = 0; i < storage.pages.length; i++) {
-				for (var j = 0; j < storage.pages[i].tests.length; j++) {
-					storage.pages[i].tests[j].page = storage.pages[i];
-				}
-			}
+			storage.pages.forEach(function(page, index, array) {
+				page.tests.forEach(function(test, index, array) {
+					test.page = page;
+				})
+			});
 		}
 	});
 

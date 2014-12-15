@@ -20,7 +20,7 @@ var data = [
 			},
 			{
 				description: '0.3 test',
-				code: '0.3 code',
+				code: 'return "SUCCESS";',
 				status: 'ERROR'
 			}
 		]
@@ -53,7 +53,7 @@ chrome.storage.local.data['PAGES'] = JSON.stringify(data);
 
 chrome.tabs = {
 	create: function(options, callback) {
-		callback({id: Math.round(Math.random()*100)});
+		callback({id: 42});
 	},
 	executeScript: function(tabId, options, callback) {
 		var code = options.code;
