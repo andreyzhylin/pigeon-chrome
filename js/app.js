@@ -3,6 +3,7 @@
 		'ngRoute',
 		'ngMessages',
 		'ui.bootstrap',
+		'ui.codemirror',
 		'pigeonControllers',
 		'pigeonDirectives'
 	]);

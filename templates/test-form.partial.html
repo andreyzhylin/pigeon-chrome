@@ -12,7 +12,8 @@
   		</div>
   		<div class="form-group">
     		<label>Test code</label>
-        <textarea ng-model="testCtrl.test.code" class="form-control" rows="5" name="testCode" required should-return></textarea>
+        <ui-codemirror ng-model="testCtrl.test.code" ui-codemirror-opts="testCtrl.editorOptions" name="testCode" required should-return></ui-codemirror>
+        <!-- <textarea ng-model="testCtrl.test.code" class="form-control" rows="5" name="testCode" required should-return></textarea> -->
         <div ng-messages="testForm.testCode.$error" class="help-block validation-message">
           <div ng-message="required">You did not enter test code.</div>
           <div ng-message="shouldReturn">Your code should return boolean value.</div>

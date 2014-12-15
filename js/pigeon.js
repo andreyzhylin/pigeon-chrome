@@ -84,10 +84,15 @@ var pigeon = (function() {
 	 * @param {Function} callback Callback function
 	 */
 	var executeOne = function(tabId, test, callback) {
-		browserService.executeScript(tabId, prepareCode(test.code), function(result) {
-			test.status = !isBoolean(result[0]) ? statuses.ERROR : 
-				result[0] ? statuses.SUCCESS : statuses.FAILED;
-			test.isExecuting = false;
+		(function(callback) {
+			browserService.executeScript(tabId, prepareCode(test.code), function(result) {
+				test.status = !isBoolean(result[0]) ? statuses.ERROR : 
+					result[0] ? statuses.SUCCESS : statuses.FAILED;
+				test.isExecuting = false;
+				(callback || noop)(test);
+			});
+		})(function(test) {
+			storage.saveData();
 			(callback || noop)(test);
 		});
 	};
