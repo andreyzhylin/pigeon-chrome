@@ -161,7 +161,7 @@ var pigeon = (function() {
 	 */
 	var executeAll = function(callback) {
 		storage.pages.forEach(function(page, index, array) {
-			executePage(storage.pages[i], callback);
+			executePage(page, callback);
 		});
 	};
 
@@ -296,7 +296,7 @@ var pigeon = (function() {
 		 */
 		removeTest: function(test) {
 			var pageIndex = this.pages.indexOf(test.page);
-			arrayRemove(this.pages[pageIndex].tests, test)
+			arrayRemove(this.pages[pageIndex].tests, test);
 			this.saveData();
 		}
 	};
@@ -309,7 +309,7 @@ var pigeon = (function() {
 			storage.pages.forEach(function(page, index, array) {
 				page.tests.forEach(function(test, index, array) {
 					test.page = page;
-				})
+				});
 			});
 		}
 	});

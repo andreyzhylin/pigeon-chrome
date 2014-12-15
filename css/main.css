@@ -45,3 +45,7 @@ table tr td:first-child, table tr th:first-child {
 .help-block.validation-message {
 	color: #a94442;
 }
+
+ul.language-picker > li > a.active {
+	color: #FFF;
+}

@@ -1,0 +1,34 @@
+{
+	"APP_NAME" : "Pigeon",
+	"MENU_OVERVIEW" : "Overview",
+
+	"LANGUAGE_EN" : "EN",
+	"LANGUAGE_RU" : "RU",
+
+	"BACK_TO_OVERVIEW" : "Back to overview",
+	"PAGE_DESCRIPTION" : "Page description",
+	"PAGE_URL" : "Page URL",
+	"PAGE_URL_REQUIRED_MESSAGE" : "You did not enter URL.",
+	"PAGE_URL_VALIDATION_MESSAGE" : "Not valid URL.",
+
+	"TEST_DESCRIPTION" : "Test description",
+	"TEST_CODE" : "Test code (javascript)",
+	"TEST_CODE_REQUIRED_MESSAGE" : "You did not enter test code.",
+	"TEST_CODE_SHOULD_RETURN_MESSAGE" : "Test code should return boolean value.",
+
+	"FORM_SUBMIT" : "Submit",
+
+	"ADD_PAGE" : "Add page",
+	"HIDE_SUCCESS_TESTS" : "Hide success tests",
+
+	"TABLE_HEADER_DESCRIPTION" : "Description",
+	"TABLE_HEADER_STATUS" : "Status",
+	"TABLE_HEADER_EDIT" : "Edit",
+	"TABLE_HEADER_REMOVE" : "Remove",
+	"TABLE_HEADER_ADD_TEST" : "Add test",
+	"TABLE_HEADER_LINK" : "Link",
+
+	"TOOLTIP_REFRESH_ALL_TESTS" : "Refresh all tests",
+	"TOOLTIP_REFRESH_PAGE_TESTS" : "Refresh page tests",
+	"TOOLTIP_REFRESH_TEST" : "Refresh test"
+}

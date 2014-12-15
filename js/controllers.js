@@ -1,5 +1,19 @@
 var pigeonControllers = angular.module('pigeonControllers', []);
 
+// Language Controller
+pigeonControllers.controller('LanguageController', ['$scope', '$translate', function($scope, $translate) {
+	this.languages = {};
+	this.languages.EN = 'en';
+	this.languages.RU = 'ru';
+
+	this.currentLanguage = this.languages.EN;
+
+	this.changeLanguage = function(key) {
+		this.currentLanguage = key;
+    	$translate.use(key);
+  	};
+}]);
+
 // Main Controller
 pigeonControllers.controller('MainController', ['$scope', function($scope) {
 	this.shouldHideSuccess = false;

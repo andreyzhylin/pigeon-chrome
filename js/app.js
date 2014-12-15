@@ -4,6 +4,7 @@
 		'ngMessages',
 		'ui.bootstrap',
 		'ui.codemirror',
+		'pascalprecht.translate',
 		'pigeonControllers',
 		'pigeonDirectives'
 	]);
@@ -47,6 +48,14 @@
 	        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 		}
 	]);
+
+	app.config(function ($translateProvider) {
+		$translateProvider.useStaticFilesLoader({
+		    prefix: '/translations/',
+		    suffix: '.json'
+		});
+		$translateProvider.preferredLanguage('en');
+	});
 
 	// Bootstrap
 	angular.element(document).ready(function() {

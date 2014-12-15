@@ -16,10 +16,22 @@
 	<nav class="navbar navbar-inverse" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#/">Pigeon</a>
+				<a class="navbar-brand" href="#/">{{'APP_NAME' | translate}}</a>
+			</div>
+			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-        			<li><a href="#/overview">Overview</a></li>
-        		</li>
+        			<li><a href="#/overview">{{'MENU_OVERVIEW' | translate}}</a></li>
+        		</ul>
+        		<ul ng-controller="LanguageController as langCtrl" class="nav navbar-nav navbar-right language-picker">
+        			<li>
+						<a ng-click="langCtrl.changeLanguage(langCtrl.languages.EN)" 
+						   ng-class="{active: langCtrl.currentLanguage === langCtrl.languages.EN}" href>{{'LANGUAGE_EN' | translate}}</a>
+					</li>
+					<li>
+						<a ng-click="langCtrl.changeLanguage(langCtrl.languages.RU)"
+						   ng-class="{active: langCtrl.currentLanguage === langCtrl.languages.RU}" href>{{'LANGUAGE_RU' | translate}}</a>
+					</li> 
+				</ul>
 			</div>
 		</div>
 	</nav>
@@ -32,6 +44,8 @@
 	<script type="text/javascript" src="js/vendor/angular-route.min.js"></script>
 	<script type="text/javascript" src="js/vendor/angular-messages.min.js"></script>
 	<script type="text/javascript" src="js/vendor/angular-mocks.js"></script>
+	<script type="text/javascript" src="js/vendor/angular-translate.min.js"></script>
+	<script type="text/javascript" src="js/vendor/angular-translate-loader-static-files.min.js"></script>
 	<script type="text/javascript" src="js/vendor/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/vendor/ui-bootstrap-tpls-0.12.0.min.js"></script>
 	<script type="text/javascript" src="js/vendor/codemirror.js"></script>
