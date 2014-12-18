@@ -1,12 +1,12 @@
 {
-  "manifest_version": 2,
+	"manifest_version": 2,
 
-  "name": "Pigeon - notification manager",
-  "description": "",
-  "version": "0.1.0.1",
+	"name": "Pigeon",
+	"description": "Tool for chrome extension testing.",
+	"version": "0.3.1",
 
-  "permissions": [
-    "tabs", "http://*/*", "https://*/*", "storage"
-  ],
-  "options_page": "index.html"
+	"permissions": [
+		"tabs", "http://*/*", "https://*/*", "storage"
+	],
+	"options_page": "src/index.html"
 }

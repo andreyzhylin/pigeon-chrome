@@ -1,0 +1,10 @@
+<ul class="nav navbar-nav navbar-right language-picker">
+	<li>
+		<a ng-click="setLanguage(languages.EN)" 
+		   ng-class="{active: currentLanguage === languages.EN}" href>{{'LANGUAGE_EN' | translate}}</a>
+	</li>
+	<li>
+		<a ng-click="setLanguage(languages.RU)"
+		   ng-class="{active: currentLanguage === languages.RU}" href>{{'LANGUAGE_RU' | translate}}</a>
+	</li> 
+</ul>

@@ -1,0 +1,34 @@
+{
+    "APP_NAME" : "Pigeon",
+    "MENU_OVERVIEW" : "Обзор тестов",
+
+    "LANGUAGE_EN" : "EN",
+    "LANGUAGE_RU" : "RU",
+
+    "BACK_TO_OVERVIEW" : "Назад к обзор",
+    "PAGE_DESCRIPTION" : "Описание страницы",
+    "PAGE_URL" : "URL адрес страницы",
+    "PAGE_URL_REQUIRED_MESSAGE" : "Вы не ввели адрес страницы.",
+    "PAGE_URL_VALIDATION_MESSAGE" : "Некорректный URL.",
+
+    "TEST_DESCRIPTION" : "Описание теста",
+    "TEST_CODE" : "Код теста (javascript)",
+    "TEST_CODE_REQUIRED_MESSAGE" : "Вы не ввели код теста.",
+    "TEST_CODE_SHOULD_RETURN_MESSAGE" : "Код теста должен возвращать значение (boolean).",
+
+    "FORM_SUBMIT" : "Сохранить",
+
+    "ADD_PAGE" : "Добавить страницу",
+    "HIDE_SUCCESS_TESTS" : "Скрыть успешно выполненные тесты",
+
+    "TABLE_HEADER_DESCRIPTION" : "Описание",
+    "TABLE_HEADER_STATUS" : "Статус",
+    "TABLE_HEADER_EDIT" : "Редактировать",
+    "TABLE_HEADER_REMOVE" : "Удалить",
+    "TABLE_HEADER_ADD_TEST" : "Добавить тест",
+    "TABLE_HEADER_LINK" : "Перейти",
+
+    "TOOLTIP_REFRESH_ALL_TESTS" : "Запустить все тесты",
+    "TOOLTIP_REFRESH_PAGE_TESTS" : "Запустить тесты на странице",
+    "TOOLTIP_REFRESH_TEST" : "Запустить тест"
+}
