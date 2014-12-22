@@ -15,7 +15,7 @@ describe('PageController', function () {
             expect(this.controller.page).toBeDefined();
             expect(this.controller.page.description).toBeUndefined();
             expect(this.controller.page.url).toBeUndefined();
-        })
+        });
 
         it('should save model', function () {
             this.controller.page.description = 'Add page';
@@ -27,6 +27,7 @@ describe('PageController', function () {
             this.controller.savePage();
             expect(pages[pages.length - 1].description).toBe(this.controller.page.description);
             expect(pages[pages.length - 1].url).toBe(this.controller.page.url);
+            pigeon.storage.removePage(pages[pages.length - 1]);
         });
     });
 
@@ -43,7 +44,7 @@ describe('PageController', function () {
             expect(this.controller.page).toBeDefined();
             expect(this.controller.page.description).toBe(pages[0].description);
             expect(this.controller.page.url).toBe(pages[0].url);
-        })
+        });
 
         it('should save model', function () {
             this.controller.page.description = 'Edit page';

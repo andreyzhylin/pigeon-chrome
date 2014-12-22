@@ -12,9 +12,14 @@
     "PAGE_URL_VALIDATION_MESSAGE" : "Некорректный URL.",
 
     "TEST_DESCRIPTION" : "Описание теста",
+    "TEST_METHOD" : "Метод запуска теста",
     "TEST_CODE" : "Код теста (javascript)",
     "TEST_CODE_REQUIRED_MESSAGE" : "Вы не ввели код теста.",
     "TEST_CODE_SHOULD_RETURN_MESSAGE" : "Код теста должен возвращать значение (boolean).",
+
+    "METHOD_TAB_OPEN" : "Открытие вкладки",
+    "METHOD_GET_REQUEST" : "GET запрос",
+    "METHOD_POST_REQUEST" : "POST запрос",
 
     "FORM_SUBMIT" : "Сохранить",
 

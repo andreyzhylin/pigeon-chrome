@@ -6,7 +6,7 @@ describe('TestController', function () {
         pigeon.init();
     }));
 
-    describe('on adding page', function () {
+    describe('on adding test', function () {
         beforeEach(inject(function (_$controller_) {
             this.pageIndex = 0;
             this.controller = _$controller_('TestController',
@@ -17,11 +17,13 @@ describe('TestController', function () {
             expect(this.controller.test).toBeDefined();
             expect(this.controller.test.description).toBeUndefined();
             expect(this.controller.test.code).toBeUndefined();
-        })
+            expect(this.controller.test.method).toBe(pigeon.methods.OPEN_TAB);
+        });
 
         it('should save model', function () {
             this.controller.test.description = 'Add test';
             this.controller.test.code = 'return true;';
+            this.controller.test.method = pigeon.methods.OPEN_TAB;
 
             var pages = pigeon.storage.getPages();
             var lastTest = pages[this.pageIndex].tests[pages[this.pageIndex].tests.length - 1];
@@ -34,7 +36,7 @@ describe('TestController', function () {
         });
     });
 
-    describe('on edition page', function () {
+    describe('on edition test', function () {
         beforeEach(inject(function (_$controller_) {
             this.pageIndex = 0;
             this.testIndex = 0;
@@ -48,11 +50,13 @@ describe('TestController', function () {
             expect(this.controller.test).toBeDefined();
             expect(this.controller.test.description).toBe(pages[this.pageIndex].tests[this.testIndex].description);
             expect(this.controller.test.code).toBe(pages[this.pageIndex].tests[this.testIndex].code);
-        })
+            expect(this.controller.test.method).toBe(pages[this.pageIndex].tests[this.testIndex].method);
+        });
 
         it('should save model', function () {
-            this.controller.test.description = 'Edit test';
+            this.controller.test.description = 'Edit test gui';
             this.controller.test.code = 'return 1 === 1;';
+            this.controller.test.method = pigeon.methods.OPEN_TAB;
 
             var pages = pigeon.storage.getPages();
             expect(pages[this.pageIndex].tests[this.testIndex].description).not.toBe(this.controller.test.description);

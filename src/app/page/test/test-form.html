@@ -5,11 +5,16 @@
 	<form ng-submit="testForm.$valid && testCtrl.saveTest()" role="form" name="testForm" novalidate>
   		<div class="form-group">
     		<label>{{'TEST_DESCRIPTION' | translate}}</label>
-    		<input ng-model="testCtrl.test.description" type="text" class="form-control" placeholder="{{'PAGE_DESCRIPTION' | translate}}" name="testDescription" required>
+    		<input ng-model="testCtrl.test.description" type="text" class="form-control" placeholder="{{'TEST_DESCRIPTION' | translate}}" name="testDescription" required>
         <div ng-messages="testForm.testDescription.$error" class="help-block validation-message">
           <div ng-message="required">{{'TEST_DESCRIPTION_REQUIRED_MESSAGE' | translate}}</div>
         </div>
   		</div>
+      <div class="form-group">
+        <label>{{'TEST_METHOD' | translate}}</label>
+        <select ng-model="testCtrl.test.method" ng-options="method.value as method.name | translate for method in testCtrl.methods">
+        </select>
+      </div>
   		<div class="form-group">
     		<label>{{'TEST_CODE' | translate}}</label>
         <ui-codemirror ng-model="testCtrl.test.code" ui-codemirror-opts="testCtrl.editorOptions" name="testCode" required should-return></ui-codemirror>

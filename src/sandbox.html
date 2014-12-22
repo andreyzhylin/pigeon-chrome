@@ -1,0 +1,14 @@
+<html>
+<head></head>
+<body>
+<script>
+  window.addEventListener('message', function(event) {
+    var code = event.data.code;
+    var result = eval(code);
+    event.source.postMessage({
+      result: result
+    }, event.origin);
+  });
+</script>
+</body>
+</html>

@@ -13,7 +13,8 @@ angular.module('pigeon.app', [
 
     'language-picker',
     'fixUrl',
-    'shouldReturnValidator'
+    'shouldReturnValidator',
+    'sandbox-frame'
 ])
 
 .config(['$routeProvider',

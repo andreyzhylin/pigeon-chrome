@@ -3,7 +3,12 @@ describe('Pigeon сore', function () {
     beforeEach(inject(function (_pigeon_) {
         pigeon = _pigeon_;
         pigeon.init();
+        jasmine.Ajax.install();
     }));
+
+    afterEach(function () {
+        jasmine.Ajax.uninstall();
+    });
 
     describe('executeTest method', function () {
         beforeEach(function () {
@@ -39,6 +44,35 @@ describe('Pigeon сore', function () {
             pigeon.executeTest(errorTest);
             expect(errorTest.status).toBe(pigeon.statuses.ERROR);
         });
+
+        it('should correctly execute GET tests', function () {
+            var callback = jasmine.createSpy('callback');
+            var pages = pigeon.storage.getPages();
+            var page = pages[pages.length - 1];
+            var test = page.tests[1];
+            pigeon.executeTest(test, callback);
+            var request = jasmine.Ajax.requests.mostRecent();
+            request.onreadystatchange = function () {
+                if (request.readyState == 4) {
+                    expect(request.status == 200);
+                    expect(test.status).toBe(pigeon.statuses.SUCCESS);
+                }
+            };
+        });
+
+        it('should correctly execute POST tests', function () {
+            var pages = pigeon.storage.getPages();
+            var page = pages[pages.length - 1];
+            var test = page.tests[2];
+            pigeon.executeTest(test);
+            var request = jasmine.Ajax.requests.mostRecent();
+            request.onreadystatchange = function () {
+                if (request.readyState == 4) {
+                    expect(request.status == 200);
+                    expect(test.status).toBe(pigeon.statuses.FAILED);
+                }
+            };
+        });
     });
 
     describe('Pigeon executePage method', function () {
@@ -50,6 +84,16 @@ describe('Pigeon сore', function () {
             var callback = jasmine.createSpy('callback');
             pigeon.executePage(this.page, callback);
             expect(callback.calls.length).toEqual(this.page.tests.length);
+        });
+
+        it('should correctly execute page with different methods', function () {
+            var pages = pigeon.storage.getPages();
+            var pageDifMethods = pages[pages.length - 1];
+            var callback = jasmine.createSpy('callback');
+            var executeTest = jasmine.createSpy('pigeon._executeRequest');
+            pigeon.executePage(pageDifMethods, callback);
+            expect(callback.calls.length).toEqual(1);
+            expect(jasmine.Ajax.requests.count()).toEqual(2);
         });
     });
 
@@ -69,6 +113,7 @@ describe('Pigeon сore', function () {
         it('should allow addition of tests', function () {
             var test = {};
             test.description = 'New test';
+            test.method = pigeon.methods.OPEN_TAB;
             var lastTest = this.pages[0].tests[this.pages[0].tests.length - 1];
             expect(lastTest.description).not.toBe(test.description);
             pigeon.storage.addTest(test, 0);
@@ -80,6 +125,7 @@ describe('Pigeon сore', function () {
             var test = {};
             test.description = 'New test';
             test.code = 'New code';
+            test.method = pigeon.methods.OPEN_TAB;
             var test1_0 = this.pages[1].tests[0];
             expect(test1_0.description).not.toBe(test.description);
             expect(test1_0.code).not.toBe(test.url);
@@ -121,7 +167,7 @@ describe('Pigeon сore', function () {
         });
 
         it('should allow deletion of pages', function () {
-            var page = this.pages[1];
+            var page = this.pages[this.pages.length - 1];
             pigeon.storage.removePage(page);
             expect(this.pages).not.toContain(page);
         });

@@ -36,6 +36,23 @@ angular.module('pigeon.chromeService', [])
                 callback(result);
             });
         },
+        /**
+         * @description
+         * Executes request and users code in sandbox
+         *
+         * @param {string}   code           Code to execute
+         * @param {string}   sandboxFrameId Id of sandbox frame element on page
+         * @param {Function} callback       Callback function
+         */
+        executeRequest: function (code, sandboxFrameId, callback) {
+            var w = chrome.extension.getViews({type: 'tab'})[0];
+            var iframe = w.document.getElementById(sandboxFrameId);
+            iframe.contentWindow.postMessage({code: code}, '*');
+            w.addEventListener('message', function sendCallback(event) {
+                w.removeEventListener('message', sendCallback);
+                callback(event.data.result);
+            });
+        },
 
         /**
          * @description

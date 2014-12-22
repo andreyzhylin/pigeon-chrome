@@ -8,6 +8,16 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
         ERROR: 'ERROR'
     };
 
+    var methods = {
+        OPEN_TAB: 'OPEN_TAB',
+        GET_REQUEST: 'GET_REQUEST',
+        POST_REQUEST: 'POST_REQUEST'
+    };
+
+    var options = {
+        SANDBOX_FRAME_ID: 'sandboxFrame'
+    };
+
     var STORAGE_PAGES_KEY = 'PAGES';
     var CLOSE_PAGE_INTERVAL_TIME = 500;
 
@@ -42,17 +52,6 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
     function noop() {}
 
     /**
-     * @description
-     * Prepares test code to execution.
-     *
-     * @param  {string} code Code to prepare
-     * @return {string}      Prepared code
-     */
-    function prepareCode(code) {
-        return '(function() {' + code + '})()';
-    }
-
-    /**
      * @param  {array} array
      * @param  {*}     obj
      * @return {boolean} Returns `true` if array includes obj, returns `false` otherwise
@@ -79,26 +78,147 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
 
     /**
      * @description
-     * Helper function that just executes one test
+     * Prepares test code to execution.
+     *
+     * @param  {string} code Code to prepare
+     * @return {string}      Prepared code
+     */
+    var _prepareCode = function (code) {
+        return '(function() {' + code + '})()';
+    };
+
+    /**
+     * @description
+     * Returns status based on return value of script
+     *
+     * @param  {*}      result Result of test script
+     * @return {string}        Test status
+     */
+    var _determineStatus = function (result) {
+        if (result === true) {
+            return statuses.SUCCESS;
+        } else if (result === false) {
+            return statuses.FAILED;
+        } else {
+            return statuses.ERROR;
+        }
+    };
+
+    /**
+     * @description
+     * Performs operations before test execution
+     *
+     * @param {object} test Test to execute
+     */
+    var _initExecution = function (test) {
+        test.status = statuses.UNKNOWN;
+        test.isExecuting = true;
+    };
+
+    /**
+     * @description
+     * Performs operations after test execution
+     *
+     * @param  {object}   test     Executed test
+     * @param  {*}        result   Result of execution
+     * @param  {Function} callback Callback after execution
+     */
+    var _completeExecution = function (test, result, callback) {
+        test.status = _determineStatus(result);
+        test.isExecuting = false;
+        storage.saveData();
+        (callback || noop)(test);
+    };
+
+    /**
+     * @param  {object}  page Page object
+     * @return {Boolean}      Returns whether all tests have been completed on the page
+     */
+    var _isPageExecuting = function (page) {
+        var isPageExecuting = page.tests.every(function (test) {
+            return test.isExecuting;
+        });
+        return isPageExecuting;
+    };
+
+    /**
+     * @param  {object}  page Page object
+     * @return {Boolean}      Returns true if some tests should be executed on tab
+     */
+    var _hasPageOnTabScripts = function (page) {
+        var hasPageOnTabScripts = page.tests.some(function (test) {
+            return test.method === methods.OPEN_TAB;
+        });
+        return hasPageOnTabScripts;
+    };
+
+    /**
+     * @description
+     * Close page after all tests are completed
+     *
+     * @param {object} page  Page to check tests
+     * @param {string} tabId Id of tab to close
+     */
+    var _closePage = function (page, tabId) {
+        var closePageInterval = setInterval(function () {
+            var isFinished = page.tests.every(function (test) {
+                return test.method !== methods.OPEN_TAB || !test.isExecuting;
+            });
+            if (isFinished) {
+                _browserService.closePage(tabId);
+                clearInterval(closePageInterval);
+            }
+        }, CLOSE_PAGE_INTERVAL_TIME);
+    };
+
+    /**
+     * @description
+     * Helper function that just executes one test on browser tab
      *
      * @param {number}   tabId    Browser tab id
      * @param {object}   test     Test to execute
      * @param {Function} callback Callback function
      */
-    var _executeOne = function (tabId, test, callback) {
-        (function (callback) {
-            _browserService.executeScript(tabId, prepareCode(test.code), function (result) {
-                test.status = !isBoolean(result[0]) ?
-                              statuses.ERROR :
-                              result[0] ?
-                              statuses.SUCCESS : statuses.FAILED;
-                test.isExecuting = false;
-                (callback || noop)(test);
-            });
-        })(function (test) {
-            storage.saveData();
-            (callback || noop)(test);
+    var _executeScript = function (tabId, test, callback) {
+        _browserService.executeScript(tabId, _prepareCode(test.code), function (result) {
+            _completeExecution(test, result[0], callback);
         });
+    };
+
+    /**
+     * @description
+     * Helper function that executes one test that has GET request or type request method
+     *
+     * @param  {object}   test     Test to execute
+     * @param  {Function} callback Callback function
+     */
+    var _executeRequest = function (test, callback) {
+        var request = new XMLHttpRequest();
+
+        var requestMethod = '';
+        if (test.method === methods.GET_REQUEST) {
+            requestMethod = 'GET';
+        } else if (test.method === methods.POST_REQUEST) {
+            requestMethod = 'POST';
+        }
+
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                if (request.status == 200) {
+                    var response = JSON.stringify(request.responseText);
+                    var code = 'var response = ' + response + ';' + test.code;
+                    _browserService.executeRequest(_prepareCode(code), options.SANDBOX_FRAME_ID, function (result) {
+                        _completeExecution(test, result, callback);
+                    });
+                } else {
+                    _completeExecution(test, statuses.ERROR, callback);
+                }
+
+            }
+        };
+
+        request.open(requestMethod, test.page.url, true);
+        request.send(null);
     };
 
     /**
@@ -112,14 +232,17 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
         if (test.isExecuting) {
             return;
         }
-        test.status = this.statuses.UNKNOWN;
-        test.isExecuting = true;
-        _browserService.openPage(test.page.url, function (tabId) {
-            _executeOne(tabId, test, function () {
-                _browserService.closePage(tabId);
-                (callback || noop)(test);
+        _initExecution(test);
+        if (test.method === methods.OPEN_TAB) {
+            _browserService.openPage(test.page.url, function (tabId) {
+                _executeScript(tabId, test, function () {
+                    _closePage(test.page, tabId);
+                    (callback || noop)(test);
+                });
             });
-        });
+        } else {
+            _executeRequest(test, callback);
+        }
     };
 
     /**
@@ -130,30 +253,26 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
      * @param {Function} callback Function to execute after the test
      */
     var executePage = function (page, callback) {
-        var isPageAlreadyExecuting = page.tests.every(function (test, index, array) {
-            return test.isExecuting;
-        });
-        if (isPageAlreadyExecuting) {
+        if (_isPageExecuting(page)) {
             return;
         }
         page.tests.forEach(function (test) {
-            test.status = statuses.UNKNOWN;
-            test.isExecuting = true;
+            _initExecution(test);
+            if (test.method !== methods.OPEN_TAB) {
+                _executeRequest(test, callback);
+            }
         });
-        _browserService.openPage(page.url, function (tabId) {
-            page.tests.forEach(function (test) {
-                _executeOne(tabId, test, callback);
-            });
-            var closePageInterval = setInterval(function () {
-                var isFinished = page.tests.every(function (test, index, array) {
-                    return !test.isExecuting;
+
+        if (_hasPageOnTabScripts(page)) {
+            _browserService.openPage(page.url, function (tabId) {
+                page.tests.forEach(function (test) {
+                    if (test.method === methods.OPEN_TAB) {
+                        _executeScript(tabId, test, callback);
+                    }
                 });
-                if (isFinished) {
-                    _browserService.closePage(tabId);
-                    clearInterval(closePageInterval);
-                }
-            }, CLOSE_PAGE_INTERVAL_TIME);
-        });
+                _closePage(page, tabId);
+            });
+        }
     };
 
     /**
@@ -270,6 +389,9 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
             test.status = statuses.UNKNOWN;
             test.isExecuting = false;
             test.page = this.pages[pageIndex];
+            if (!isDefined(this.pages[pageIndex].tests)) {
+                this.pages[pageIndex].tests = [];
+            }
             this.pages[pageIndex].tests.push(test);
             this.saveData();
         },
@@ -287,6 +409,7 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
             if (this.pages[pageIndex].tests[testIndex].code !== test.code) {
                 this.pages[pageIndex].tests[testIndex].status = statuses.UNKNOWN;
             }
+            this.pages[pageIndex].tests[testIndex].method = test.method;
             this.pages[pageIndex].tests[testIndex].code = test.code;
             this.saveData();
         },
@@ -326,6 +449,8 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
 
     return {
         statuses: statuses,
+        methods: methods,
+        options: options,
         storage: storage,
         init: init,
         executeTest: executeTest,

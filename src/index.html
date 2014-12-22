@@ -3,7 +3,7 @@
 <head>
 	<title>Tool for chrome extension testing</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta charset="utf-8"> 
+	<meta charset="utf-8">
 
 	<link href="assets/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
@@ -30,7 +30,10 @@
 	<div class="container">
 		<div ng-view></div>
 	</div>
-	
+	<div sandbox-frame="add"></div>
+
+	<sandbox-frame></sandbox-frame>
+
 	<script type="text/javascript" src="/vendor/angular/angular.min.js"></script>
 	<script type="text/javascript" src="/vendor/angular-route/angular-route.min.js"></script>
 	<script type="text/javascript" src="/vendor/angular-messages/angular-messages.min.js"></script>
@@ -59,5 +62,6 @@
 	<script type="text/javascript" src="common/directives/icon.js"></script>
 	<script type="text/javascript" src="common/directives/fix-url.js"></script>
 	<script type="text/javascript" src="common/directives/should-return-validator.js"></script>
+	<script type="text/javascript" src="common/directives/sandbox-frame.js"></script>
 </body>
 </html>

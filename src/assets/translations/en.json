@@ -12,9 +12,15 @@
     "PAGE_URL_VALIDATION_MESSAGE" : "Not valid URL.",
 
     "TEST_DESCRIPTION" : "Test description",
+    "TEST_DESCRIPTION_REQUIRED_MESSAGE" : "You did not enter test description",
+    "TEST_METHOD" : "Execution method",
     "TEST_CODE" : "Test code (javascript)",
     "TEST_CODE_REQUIRED_MESSAGE" : "You did not enter test code.",
     "TEST_CODE_SHOULD_RETURN_MESSAGE" : "Test code should return boolean value.",
+
+    "METHOD_OPEN_TAB" : "Open tab",
+    "METHOD_GET_REQUEST" : "GET request",
+    "METHOD_POST_REQUEST" : "POST request",
 
     "FORM_SUBMIT" : "Submit",
 
