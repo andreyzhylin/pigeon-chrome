@@ -1,6 +1,6 @@
 angular.module('pigeon.core', ['pigeon.chromeService', 'pascalprecht.translate'])
 
-.factory('pigeon', ['chromeService', '$translate', function (chromeService, $translate) {
+.factory('pigeon', ['chromeService', '$translate', '$q', function (chromeService, $translate, $q) {
     var statuses = {
         UNKNOWN: 'UNKNOWN',
         SUCCESS: 'SUCCESS',
@@ -486,6 +486,7 @@ angular.module('pigeon.core', ['pigeon.chromeService', 'pascalprecht.translate']
      * Loads data from browser storage
      */
     var init = function () {
+        var deferred = $q.defer();
         _browserService.loadData(STORAGE_PAGES_KEY, function (data) {
             if (isDefined(data[STORAGE_PAGES_KEY])) {
                 storage.pages = JSON.parse(data[STORAGE_PAGES_KEY]);
@@ -499,7 +500,9 @@ angular.module('pigeon.core', ['pigeon.chromeService', 'pascalprecht.translate']
                     }
                 });
             }
+            deferred.resolve();
         });
+        return deferred.promise;
     };
 
     return {

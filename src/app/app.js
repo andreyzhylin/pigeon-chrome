@@ -19,35 +19,47 @@ angular.module('pigeon.app', [
 
 .config(['$routeProvider',
     function ($routeProvider) {
-        $routeProvider.
-            when('/pages', {
-                templateUrl: 'app/overview/overview.html',
-                controller: 'OverviewController',
-                controllerAs: 'overviewCtrl'
-            }).
-            when('/pages/add', {
-                templateUrl: 'app/page/page-form.html',
-                controller: 'PageController',
-                controllerAs: 'pageCtrl'
-            }).
-            when('/pages/edit/:pageIndex', {
-                templateUrl: 'app/page/page-form.html',
-                controller: 'PageController',
-                controllerAs: 'pageCtrl'
-            }).
-            when('/pages/:pageIndex/tests/add', {
-                templateUrl: 'app/page/test/test-form.html',
-                controller: 'TestController',
-                controllerAs: 'testCtrl'
-            }).
-            when('/pages/:pageIndex/tests/edit/:testIndex', {
-                templateUrl: 'app/page/test/test-form.html',
-                controller: 'TestController',
-                controllerAs: 'testCtrl'
-            }).
-            otherwise({
-                redirectTo: '/pages'
-            });
+        // Add global resolve (init pigeon core)
+        angular.extend({}, $routeProvider, {
+            when: function (path, route) {
+                route.resolve = (route.resolve) ? route.resolve : {};
+                angular.extend(route.resolve, {
+                    data: function(pigeon) {
+                        return pigeon.init();
+                    }
+                });
+                $routeProvider.when(path, route);
+                return this;
+            }
+        }).
+        when('/pages', {
+            templateUrl: 'app/overview/overview.html',
+            controller: 'OverviewController',
+            controllerAs: 'overviewCtrl'
+        }).
+        when('/pages/add', {
+            templateUrl: 'app/page/page-form.html',
+            controller: 'PageController',
+            controllerAs: 'pageCtrl'
+        }).
+        when('/pages/edit/:pageIndex', {
+            templateUrl: 'app/page/page-form.html',
+            controller: 'PageController',
+            controllerAs: 'pageCtrl'
+        }).
+        when('/pages/:pageIndex/tests/add', {
+            templateUrl: 'app/page/test/test-form.html',
+            controller: 'TestController',
+            controllerAs: 'testCtrl'
+        }).
+        when('/pages/:pageIndex/tests/edit/:testIndex', {
+            templateUrl: 'app/page/test/test-form.html',
+            controller: 'TestController',
+            controllerAs: 'testCtrl'
+        }).
+        otherwise({
+            redirectTo: '/pages'
+        });
     }
 ])
 
@@ -64,10 +76,6 @@ angular.module('pigeon.app', [
     });
     $translateProvider.preferredLanguage('en');
 })
-
-.run(['pigeon', function (pigeon) {
-    pigeon.init();
-}])
 
 ;
 
