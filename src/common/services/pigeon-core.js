@@ -195,13 +195,6 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
     var _executeRequest = function (test, callback) {
         var request = new XMLHttpRequest();
 
-        var requestMethod = '';
-        if (test.method === methods.GET_REQUEST) {
-            requestMethod = 'GET';
-        } else if (test.method === methods.POST_REQUEST) {
-            requestMethod = 'POST';
-        }
-
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
                 if (request.status == 200) {
@@ -217,8 +210,21 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
             }
         };
 
-        request.open(requestMethod, test.page.url, true);
-        request.send(null);
+        var paramsStr = '';
+        if (isDefined(test.params)) {
+            test.params.forEach(function (param) {
+                paramsStr += param.key + '=' + encodeURIComponent(param.value) + '&';
+            });
+        }
+
+        if (test.method === methods.GET_REQUEST) {
+            request.open('GET', test.page.url + '?' + paramsStr, true);
+            request.send(null);
+        } else if (test.method === methods.POST_REQUEST) {
+            request.open('POST', test.page.url, true);
+            request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            request.send(paramsStr);
+        }
     };
 
     /**
@@ -350,6 +356,12 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
          * @param {object} pageIndex Page index in array
          */
         editPage: function (page, pageIndex) {
+            if (this.pages[pageIndex].url !== page.url && isDefined(this.pages[pageIndex].tests)) {
+                this.pages[pageIndex].tests.forEach(function (test) {
+                    test.status = statuses.UNKNOWN;
+                });
+            }
+
             this.pages[pageIndex].description = page.description;
             this.pages[pageIndex].url = page.url;
             this.saveData();
@@ -392,6 +404,15 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
             if (!isDefined(this.pages[pageIndex].tests)) {
                 this.pages[pageIndex].tests = [];
             }
+            var params = [];
+            if (isDefined(test.params)) {
+                test.params.forEach(function (param) {
+                    if (param.key !== '' && param.value !== '') {
+                        params.push(param);
+                    }
+                });
+            }
+            test.params = params;
             this.pages[pageIndex].tests.push(test);
             this.saveData();
         },
@@ -405,12 +426,21 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
          * @param {number} testIndex Test index in page array
          */
         editTest: function (test, pageIndex, testIndex) {
-            this.pages[pageIndex].tests[testIndex].description = test.description;
-            if (this.pages[pageIndex].tests[testIndex].code !== test.code) {
-                this.pages[pageIndex].tests[testIndex].status = statuses.UNKNOWN;
+            var oldTest = this.pages[pageIndex].tests[testIndex];
+            oldTest.description = test.description;
+            if (oldTest.code !== test.code) {
+                oldTest.status = statuses.UNKNOWN;
             }
-            this.pages[pageIndex].tests[testIndex].method = test.method;
-            this.pages[pageIndex].tests[testIndex].code = test.code;
+            oldTest.method = test.method;
+            oldTest.params = [];
+            if (isDefined(test.params)) {
+                test.params.forEach(function (param) {
+                    if (param.key !== '' && param.value !== '') {
+                        oldTest.params.push(param);
+                    }
+                });
+            }
+            oldTest.code = test.code;
             this.saveData();
         },
 
@@ -435,11 +465,12 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
         _browserService.loadData(STORAGE_PAGES_KEY, function (data) {
             if (isDefined(data[STORAGE_PAGES_KEY])) {
                 storage.pages = JSON.parse(data[STORAGE_PAGES_KEY]);
-                // Return links to pages after load
+                // Return links to pages after load and reset isExecuting
                 storage.pages.forEach(function (page) {
                     if (isDefined(page.tests)) {
                         page.tests.forEach(function (test) {
                             test.page = page;
+                            test.isExecuting = false;
                         });
                     }
                 });

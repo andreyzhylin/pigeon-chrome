@@ -43,7 +43,7 @@ angular.module('pigeon.overview', [
     };
 
     this.shouldHideTest = function (test) {
-        return (test.status === this.statuses.SUCCESS) && this.shouldHideSuccess;
+        return (test.status === pigeon.statuses.SUCCESS) && this.shouldHideSuccess;
     };
 
     this.removeTest = function (test) {

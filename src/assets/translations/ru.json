@@ -13,9 +13,12 @@
 
     "TEST_DESCRIPTION" : "Описание теста",
     "TEST_METHOD" : "Метод запуска теста",
+    "TEST_PARAMS" : "Параметры запроса",
+    "TEST_ADD_PARAM" : "Добавить параметр",
     "TEST_CODE" : "Код теста (javascript)",
     "TEST_CODE_REQUIRED_MESSAGE" : "Вы не ввели код теста.",
     "TEST_CODE_SHOULD_RETURN_MESSAGE" : "Код теста должен возвращать значение (boolean).",
+    "TEST_RESPONSE_VARIABLE" : "responseText содержится в переменной 'response'",
 
     "METHOD_TAB_OPEN" : "Открытие вкладки",
     "METHOD_GET_REQUEST" : "GET запрос",

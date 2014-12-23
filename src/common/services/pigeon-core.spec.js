@@ -128,11 +128,50 @@ describe('Pigeon сore', function () {
             test.method = pigeon.methods.OPEN_TAB;
             var test1_0 = this.pages[1].tests[0];
             expect(test1_0.description).not.toBe(test.description);
-            expect(test1_0.code).not.toBe(test.url);
+            expect(test1_0.code).not.toBe(test.code);
             pigeon.storage.editTest(test, 1, 0);
             test1_0 = this.pages[1].tests[0];
             expect(test1_0.description).toBe(test.description);
             expect(test1_0.code).toBe(test.code);
+        });
+
+        it('should add params', function () {
+            var params = [{key:'without value', value:''},
+                          {key:'', value:'without key'},
+                          {key:'', value:''},
+                          {key:'key', value:'value'}];
+            var test = {};
+            test.description = 'Request';
+            test.method = pigeon.methods.GET_REQUEST;
+            test.params = params;
+            pigeon.storage.addTest(test, 0);
+            lastTest = this.pages[0].tests[this.pages[0].tests.length - 1];
+            expect(lastTest.description).toBe(test.description);
+            expect(lastTest.method).toBe(test.method);
+            expect(lastTest.params.length).toBe(1);
+            expect(lastTest.params[0].key).toBe('key');
+            expect(lastTest.params[0].value).toBe('value');
+        });
+
+        it('should edit params', function () {
+            var params = [{key:'without value', value:''},
+                          {key:'', value:'without key'},
+                          {key:'', value:''},
+                          {key:'key', value:'value'}];
+            var test = {};
+            test.method = pigeon.methods.POST_REQUEST;
+            test.params = params;
+            var test1_0 = this.pages[1].tests[0];
+            expect(test1_0.description).not.toBe(test.description);
+            expect(test1_0.params).not.toBe(test.params);
+            pigeon.storage.editTest(test, 1, 0);
+            test1_0 = this.pages[1].tests[0];
+            expect(test1_0.description).toBe(test.description);
+            expect(test1_0.description).toBe(test.description);
+            expect(test1_0.method).toBe(test.method);
+            expect(test1_0.params.length).toBe(1);
+            expect(test1_0.params[0].key).toBe('key');
+            expect(test1_0.params[0].value).toBe('value');
         });
 
         it('should allow deletion of tests', function () {
@@ -164,6 +203,18 @@ describe('Pigeon сore', function () {
             pigeon.storage.editPage(page, 1);
             expect(this.pages[1].description).toBe(page.description);
             expect(this.pages[1].url).toBe(page.url);
+        });
+
+        it('should set UNKWOWN status when url changes', function () {
+            var page = {};
+            page.url = 'New url 1';
+            page.tests = [{status: pigeon.statuses.SUCCESS}];
+            expect(this.pages[0].url).not.toBe(page.url);
+            pigeon.storage.editPage(page, 0);
+            expect(this.pages[0].url).toBe(page.url);
+            this.pages[0].tests.forEach(function (test) {
+                expect(test.status).toBe(pigeon.statuses.UNKNOWN);
+            });
         });
 
         it('should allow deletion of pages', function () {

@@ -36,7 +36,7 @@ var data = [
             {
                 description: '1.0 test',
                 code: '1.0 code',
-                status: 'UNKNOWN',
+                status: 'ERROR',
                 method: 'OPEN_TAB'
             }
         ]

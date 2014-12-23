@@ -53,3 +53,7 @@ ul.language-picker > li > a.active {
 #sandboxFrame {
 	display: none;
 }
+
+.test-params input {
+	margin: 10px 20px 20px 0;
+}

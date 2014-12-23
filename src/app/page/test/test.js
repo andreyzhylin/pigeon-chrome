@@ -11,6 +11,10 @@ angular.module('pigeon.test', ['pigeon.core'])
     if (angular.isDefined($routeParams.testIndex)) {
         this.test = angular.copy(pigeon.storage.getTest($routeParams.pageIndex, $routeParams.testIndex));
     }
+    if (angular.isUndefined(this.test.params)) {
+        this.test.params = [];
+    }
+    this.test.params.push({key: '', value: ''});
 
     this.editorOptions = {
         lineWrapping: true,
@@ -26,6 +30,10 @@ angular.module('pigeon.test', ['pigeon.core'])
             pigeon.storage.addTest(this.test, $routeParams.pageIndex);
         }
         $location.path('/');
+    };
+
+    this.isRequest = function () {
+        return this.test.method !== pigeon.methods.OPEN_TAB;
     };
 }])
 

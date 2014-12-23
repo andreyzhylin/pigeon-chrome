@@ -14,9 +14,12 @@
     "TEST_DESCRIPTION" : "Test description",
     "TEST_DESCRIPTION_REQUIRED_MESSAGE" : "You did not enter test description",
     "TEST_METHOD" : "Execution method",
+    "TEST_PARAMS" : "Request params",
+    "TEST_ADD_PARAM" : "Add param",
     "TEST_CODE" : "Test code (javascript)",
     "TEST_CODE_REQUIRED_MESSAGE" : "You did not enter test code.",
     "TEST_CODE_SHOULD_RETURN_MESSAGE" : "Test code should return boolean value.",
+    "TEST_RESPONSE_VARIABLE" : "The variable 'response' contains responseText",
 
     "METHOD_OPEN_TAB" : "Open tab",
     "METHOD_GET_REQUEST" : "GET request",

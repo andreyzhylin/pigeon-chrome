@@ -17,7 +17,7 @@
 		<th class="col-md-1">{{'TABLE_HEADER_EDIT' | translate}}</th>
 		<th class="col-md-1">{{'TABLE_HEADER_REMOVE' | translate}}</th>
 		<th class="col-md-1">{{'TABLE_HEADER_ADD_TEST' | translate}}</th>
-		<th class="col-md-1">{{'TABLE_HEADER_LINK' | translate}}</th> 
+		<th class="col-md-1">{{'TABLE_HEADER_LINK' | translate}}</th>
 	</tr>
 	</thead>
 	<tbody ng-repeat="page in overviewCtrl.pages">
@@ -25,7 +25,7 @@
 			<th>{{ page.description }}</th>
 			<th>
 				<span class="status-success">{{ overviewCtrl.countTests(page, overviewCtrl.statuses.SUCCESS) || 0 }}</span>
-				<span class="divider"> / </span> 
+				<span class="divider"> / </span>
 				<span class="status-failed">{{ overviewCtrl.countTests(page, overviewCtrl.statuses.FAILED) + overviewCtrl.countTests(page, overviewCtrl.statuses.ERROR) || 0 }}</span>
 				<span class="divider"> / </span>
 				<span class="status-unknown">{{ overviewCtrl.countTests(page, overviewCtrl.statuses.UNKNOWN) || 0 }}</span>
