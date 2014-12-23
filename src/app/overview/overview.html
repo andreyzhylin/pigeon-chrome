@@ -39,7 +39,10 @@
 		<tr ng-repeat="test in page.tests" ng-hide="overviewCtrl.shouldHideTest(test)">
 			<td>{{ test.description }}</td>
 			<td>
-				<span ng-class="overviewCtrl.getStatusCssClass(test.status)" ng-hide="test.isExecuting">{{ overviewCtrl.getStatusName(test.status) }}</span>
+				<span ng-class="overviewCtrl.getStatusCssClass(test.status)" ng-hide="test.isExecuting">
+					{{ overviewCtrl.getStatusName(test.status) }}
+					<span ng-show="test.status === overviewCtrl.statuses.ERROR" tooltip="{{ test.errorMessage }}"  tooltip-trigger="click" tooltip-placement="top" icon="question-sign"></span>
+				</span>
 				<img ng-show="test.isExecuting" src="assets/img/loader.gif" class="loader">
 			</td>
 			<td><span ng-click="overviewCtrl.refreshTest(test)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_TEST' | translate}}"></span></td>

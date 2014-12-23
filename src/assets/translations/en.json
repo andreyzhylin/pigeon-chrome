@@ -39,5 +39,9 @@
 
     "TOOLTIP_REFRESH_ALL_TESTS" : "Refresh all tests",
     "TOOLTIP_REFRESH_PAGE_TESTS" : "Refresh page tests",
-    "TOOLTIP_REFRESH_TEST" : "Refresh test"
+    "TOOLTIP_REFRESH_TEST" : "Refresh test",
+
+    "ERROR_REQUEST_STATUS" : "Request status: ",
+    "ERROR_URL_NOT_FOUND" : "Page URL not found",
+    "ERROR_NOT_BOOLEAN" : "Expected 'Boolean' value, returned: "
 }

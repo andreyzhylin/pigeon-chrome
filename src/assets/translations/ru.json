@@ -38,5 +38,9 @@
 
     "TOOLTIP_REFRESH_ALL_TESTS" : "Запустить все тесты",
     "TOOLTIP_REFRESH_PAGE_TESTS" : "Запустить тесты на странице",
-    "TOOLTIP_REFRESH_TEST" : "Запустить тест"
+    "TOOLTIP_REFRESH_TEST" : "Запустить тест",
+
+    "ERROR_REQUEST_STATUS" : "Статус запроса: ",
+    "ERROR_URL_NOT_FOUND" : "Адрес страницы не найден",
+    "ERROR_NOT_BOOLEAN" : "Ожидалось значение типа 'Boolean', получено: "
 }

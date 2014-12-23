@@ -1,4 +1,4 @@
-angular.module('language-picker', ['pascalprecht.translate'])
+angular.module('languagePicker', ['pascalprecht.translate'])
 
 .directive('languagePicker', function () {
     return {

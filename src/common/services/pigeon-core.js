@@ -1,6 +1,6 @@
-angular.module('pigeon.core', ['pigeon.chromeService'])
+angular.module('pigeon.core', ['pigeon.chromeService', 'pascalprecht.translate'])
 
-.factory('pigeon', ['chromeService', function (chromeService) {
+.factory('pigeon', ['chromeService', '$translate', function (chromeService, $translate) {
     var statuses = {
         UNKNOWN: 'UNKNOWN',
         SUCCESS: 'SUCCESS',
@@ -47,6 +47,17 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
 
     /**
      * @description
+     * Determines if a reference is object.
+     *
+     * @param   {*} value Reference to check.
+     * @returns {boolean} True if `value` is object.
+     */
+    function isObject(value) {
+        return typeof value === 'object' && value !== null;
+    }
+
+    /**
+     * @description
      * A function that performs no operations.
      */
     function noop() {}
@@ -84,7 +95,18 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
      * @return {string}      Prepared code
      */
     var _prepareCode = function (code) {
-        return '(function() {' + code + '})()';
+        return '(function() { try {' + code + '} catch(e) {return {value: undefined, errorMessage: e.message};}})()';
+    };
+
+    /**
+     * @description
+     * Prepares result of test execution.
+     *
+     * @param  {*} result Result to prepare
+     * @return {object}   Prepared result
+     */
+    var _prepareResult = function (result) {
+        return isObject(result) ? result : {value: result, errorMessage: ''};
     };
 
     /**
@@ -124,7 +146,9 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
      * @param  {Function} callback Callback after execution
      */
     var _completeExecution = function (test, result, callback) {
-        test.status = _determineStatus(result);
+        test.status = _determineStatus(result.value);
+        test.errorMessage = test.status === statuses.ERROR && result.errorMessage === '' ?
+            $translate.instant('ERROR_NOT_BOOLEAN') + '\'' + result.value + '\'' : result.errorMessage;
         test.isExecuting = false;
         storage.saveData();
         (callback || noop)(test);
@@ -181,7 +205,7 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
      */
     var _executeScript = function (tabId, test, callback) {
         _browserService.executeScript(tabId, _prepareCode(test.code), function (result) {
-            _completeExecution(test, result[0], callback);
+            _completeExecution(test, _prepareResult(result[0]), callback);
         });
     };
 
@@ -194,19 +218,19 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
      */
     var _executeRequest = function (test, callback) {
         var request = new XMLHttpRequest();
-
         request.onreadystatechange = function () {
             if (request.readyState == 4) {
                 if (request.status == 200) {
                     var response = JSON.stringify(request.responseText);
                     var code = 'var response = ' + response + ';' + test.code;
                     _browserService.executeRequest(_prepareCode(code), options.SANDBOX_FRAME_ID, function (result) {
-                        _completeExecution(test, result, callback);
+                        _completeExecution(test, _prepareResult(result), callback);
                     });
                 } else {
-                    _completeExecution(test, statuses.ERROR, callback);
+                    var errorMessage = request.status === 0 ? $translate.instant('ERROR_URL_NOT_FOUND') :
+                        $translate.instant('ERROR_REQUEST_STATUS') + request.status + ' (' + request.statusText + ')';
+                    _completeExecution(test, {value: undefined, errorMessage: errorMessage}, callback);
                 }
-
             }
         };
 
@@ -428,10 +452,11 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
         editTest: function (test, pageIndex, testIndex) {
             var oldTest = this.pages[pageIndex].tests[testIndex];
             oldTest.description = test.description;
-            if (oldTest.code !== test.code) {
+            if (oldTest.code !== test.code || oldTest.method !== test.method) {
                 oldTest.status = statuses.UNKNOWN;
             }
             oldTest.method = test.method;
+            oldTest.code = test.code;
             oldTest.params = [];
             if (isDefined(test.params)) {
                 test.params.forEach(function (param) {
@@ -440,7 +465,6 @@ angular.module('pigeon.core', ['pigeon.chromeService'])
                     }
                 });
             }
-            oldTest.code = test.code;
             this.saveData();
         },
 

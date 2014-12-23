@@ -44,35 +44,6 @@ describe('Pigeon сore', function () {
             pigeon.executeTest(errorTest);
             expect(errorTest.status).toBe(pigeon.statuses.ERROR);
         });
-
-        it('should correctly execute GET tests', function () {
-            var callback = jasmine.createSpy('callback');
-            var pages = pigeon.storage.getPages();
-            var page = pages[pages.length - 1];
-            var test = page.tests[1];
-            pigeon.executeTest(test, callback);
-            var request = jasmine.Ajax.requests.mostRecent();
-            request.onreadystatchange = function () {
-                if (request.readyState == 4) {
-                    expect(request.status == 200);
-                    expect(test.status).toBe(pigeon.statuses.SUCCESS);
-                }
-            };
-        });
-
-        it('should correctly execute POST tests', function () {
-            var pages = pigeon.storage.getPages();
-            var page = pages[pages.length - 1];
-            var test = page.tests[2];
-            pigeon.executeTest(test);
-            var request = jasmine.Ajax.requests.mostRecent();
-            request.onreadystatchange = function () {
-                if (request.readyState == 4) {
-                    expect(request.status == 200);
-                    expect(test.status).toBe(pigeon.statuses.FAILED);
-                }
-            };
-        });
     });
 
     describe('Pigeon executePage method', function () {

@@ -1,8 +1,8 @@
-angular.module('sandbox-frame', ['pigeon.core'])
+angular.module('sandboxFrame', ['pigeon.core'])
 
 .directive('sandboxFrame', ['pigeon', function (pigeon) {
     return {
-        restrict: 'A',
+        restrict: 'E',
         template: '<iframe id="' + pigeon.options.SANDBOX_FRAME_ID + '" src="sandbox.html"></iframe>',
         scope: {}
     };

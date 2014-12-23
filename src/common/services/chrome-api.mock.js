@@ -57,13 +57,13 @@ var data = [
             },
             {
                 description: 'GET request test',
-                code: 'response.length > 100;',
+                code: 'return response.length > 100;',
                 status: 'UNKNOWN',
                 method: 'GET_REQUEST'
             },
             {
                 description: 'POST request test',
-                code: 'response.length < 100;',
+                code: 'return response.length < 100;',
                 status: 'UNKNOWN',
                 method: 'POST_REQUEST'
             }
@@ -96,5 +96,11 @@ chrome.tabs = {
     },
     remove: function (tabId) {
 
+    },
+};
+
+chrome.extension = {
+    getViews: function () {
+        return [window];
     }
 };

@@ -11,10 +11,10 @@ angular.module('pigeon.app', [
     'pigeon.page',
     'pigeon.test',
 
-    'language-picker',
+    'languagePicker',
     'fixUrl',
     'shouldReturnValidator',
-    'sandbox-frame'
+    'sandboxFrame'
 ])
 
 .config(['$routeProvider',
