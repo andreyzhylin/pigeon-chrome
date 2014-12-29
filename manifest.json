@@ -3,7 +3,7 @@
 
 	"name": "Pigeon",
 	"description": "Tool for chrome extension testing.",
-	"version": "0.3.1",
+	"version": "1.0.0",
 
 	"permissions": [
 		"tabs", "<all_urls>", "storage", "notifications"
