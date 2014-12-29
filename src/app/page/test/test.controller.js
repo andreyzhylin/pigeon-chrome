@@ -29,7 +29,7 @@ angular.module('pigeon.testController', [
             theme: 'elegant'
         };
 
-        this.saveTest = function () {
+        this.save = function () {
             if (angular.isDefined($routeParams.testIndex)) {
                 testService.edit(this.test, $routeParams.pageIndex, $routeParams.testIndex);
             } else {

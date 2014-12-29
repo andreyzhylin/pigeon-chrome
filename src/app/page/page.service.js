@@ -25,7 +25,7 @@ angular.module('pigeon.pageService', [
      * @description
      * Sets links to pages and reset executing.
      *
-     * @param  {array} data Storage data
+     * @param  {string} data Storage data in JSON
      * @return {array} Pages
      */
     var _preparePages = function (data) {

@@ -3,6 +3,7 @@ angular.module('pigeon.util', [])
 .factory('util', function () {
     return {
         STORAGE_PAGES_KEY: 'PAGES',
+        STORAGE_FILES_KEY: 'FILES',
         /**
          * @description
          * Removes value from array.

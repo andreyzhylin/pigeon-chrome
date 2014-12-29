@@ -1,15 +1,17 @@
-describe('', function () {
+describe('Pigeon', function () {
     beforeEach(module('pigeon.pageService'));
     beforeEach(module('pigeon.testService'));
+    beforeEach(module('pigeon.fileService'));
     beforeEach(module('pigeon.overviewService'));
     beforeEach(module('pigeon.statuses'));
     beforeEach(module('pigeon.methods'));
     beforeEach(module('pigeon.overviewController'));
 
-    beforeEach(inject(function (_$rootScope_, _pageService_, _testService_, _overviewService_, _statuses_, _methods_) {
+    beforeEach(inject(function (_$rootScope_, _pageService_, _testService_, _fileService_, _overviewService_, _statuses_, _methods_) {
         $rootScope = _$rootScope_;
         pageService = _pageService_;
         testService = _testService_;
+        fileService = _fileService_;
         overviewService = _overviewService_;
         statuses = _statuses_;
         methods = _methods_;
@@ -17,6 +19,7 @@ describe('', function () {
 
     beforeEach(function (done) {
         pageService.init();
+        fileService.init();
         $rootScope.$digest();
         done();
     });
@@ -72,6 +75,18 @@ describe('', function () {
                     expect(failedTest.errorMessage).toBe('');
                     expect(errorTest.status).toBe(statuses.ERROR);
                     expect(errorTest.errorMessage).toMatch(/ERROR_NOT_BOOLEAN/);
+                });
+                $rootScope.$digest();
+                done();
+            });
+
+            it('should execute all files before tests', function (done) {
+                var test = this.page.tests[0];
+                var oldCode = test.code;
+                test.code = 'return myModule.test === 42;'
+                overviewService.executeTest(test).then(function () {
+                    expect(test.status).toBe(statuses.SUCCESS);
+                    test.code = oldCode;
                 });
                 $rootScope.$digest();
                 done();

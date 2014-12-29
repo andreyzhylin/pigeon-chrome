@@ -11,7 +11,7 @@ angular.module('pigeon.pageController', [
             this.page = angular.copy(pageService.get($routeParams.pageIndex));
         }
 
-        this.savePage = function () {
+        this.save = function () {
             if (angular.isDefined($routeParams.pageIndex)) {
                 pageService.edit(this.page, $routeParams.pageIndex);
             } else {

@@ -102,7 +102,7 @@ describe('PageController', function () {
 
             var pages = pageService.getAll();
             expect(pages).not.toContain(this.controller.page);
-            this.controller.savePage();
+            this.controller.save();
             expect(pages).toContain(this.controller.page);
             pageService.remove(pages[pages.length - 1]);
         });
@@ -131,7 +131,7 @@ describe('PageController', function () {
             var page = pageService.get(this.pageIndex);
             expect(page.description).not.toBe(this.controller.page.description);
             expect(page.url).not.toBe(this.controller.page.url);
-            this.controller.savePage();
+            this.controller.save();
             page = pageService.get(this.pageIndex);
             expect(page.description).toBe(this.controller.page.description);
             expect(page.url).toBe(this.controller.page.url);

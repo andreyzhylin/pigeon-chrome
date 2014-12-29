@@ -1,0 +1,20 @@
+<div class="pull-left">
+	<a href="#/files/add" class="btn btn-default"><span icon="plus"></span> {{'ADD_FILE' | translate}}</a>
+</div>
+
+<table class="table">
+	<thead>
+	<tr>
+		<th class="col-md-6">{{'TABLE_HEADER_NAME' | translate}}</th>
+		<th class="col-md-1">{{'TABLE_HEADER_EDIT' | translate}}</th>
+		<th class="col-md-1">{{'TABLE_HEADER_REMOVE' | translate}}</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="file in fileCtrl.files">
+			<th>{{ file.name }}</th>
+			<th><a href="#/files/edit/{{$index}}" icon="edit"></a></th>
+			<th><span ng-click="fileCtrl.remove(file)" icon="remove"></span></th>
+		</tr>
+	</tbody>
+</table>

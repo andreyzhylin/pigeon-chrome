@@ -129,7 +129,7 @@ describe('TestController', function () {
             this.controller.test.method = methods.OPEN_TAB;
 
             expect(testService.getAll(this.pageIndex)).not.toContain(this.controller.test);
-            this.controller.saveTest();
+            this.controller.save();
             expect(testService.getAll(this.pageIndex)).toContain(this.controller.test);
         });
     });
@@ -159,7 +159,7 @@ describe('TestController', function () {
             var oldTest = testService.get(this.pageIndex, this.testIndex);
             expect(oldTest.description).not.toBe(this.controller.test.description);
             expect(oldTest.code).not.toBe(this.controller.test.code);
-            this.controller.saveTest();
+            this.controller.save();
             oldTest = testService.get(this.pageIndex, this.testIndex);
             expect(oldTest.description).toBe(this.controller.test.description);
             expect(oldTest.code).toBe(this.controller.test.code);

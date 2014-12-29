@@ -2,7 +2,7 @@
   <a href="#/overview">&larr; {{'BACK_TO_OVERVIEW' | translate}}</a>
 </div>
 <div class="row-fluid top-buffer">
-  <form ng-submit="pageForm.$valid && pageCtrl.savePage()" role="form" name="pageForm" novalidate>
+  <form ng-submit="pageForm.$valid && pageCtrl.save()" role="form" name="pageForm" novalidate>
       <div class="form-group">
         <label>{{'PAGE_DESCRIPTION' | translate}}</label>
         <input ng-model="pageCtrl.page.description" type="text" class="form-control" placeholder="{{'PAGE_DESCRIPTION' | translate}}" name="pageDescription">

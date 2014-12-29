@@ -49,9 +49,13 @@ module.exports = function(config) {
         'src/app/page/test/test.service.js',
         'src/app/page/test/test.controller.js',
 
+        'src/app/file/file.service.js',
+        'src/app/file/file.controller.js',
+
         'src/common/directives/language-picker/language-picker.js',
         'src/common/directives/icon.js',
         'src/common/directives/fix-url.js',
+        'src/common/directives/fileread.js',
         'src/common/directives/should-return-validator.js',
         'src/common/directives/test-status/test-status.js',
 

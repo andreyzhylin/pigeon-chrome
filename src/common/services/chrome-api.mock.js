@@ -95,10 +95,22 @@ var pages = [
     }
 ];
 
+var files = [
+    {
+        name: '0file.js',
+        code: 'var myModule = {test: 42};'
+    },
+    {
+        name: '1file.js',
+        code: 'var myModule2 = {};'
+    }
+];
+
 chrome.storage = {
     local: {
         data: {
-            PAGES: JSON.stringify(pages)
+            PAGES: JSON.stringify(pages),
+            FILES: JSON.stringify(files)
         },
         get: function (key, callback) {
             callback(chrome.storage.local.data);

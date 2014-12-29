@@ -1,6 +1,7 @@
 {
     "APP_NAME" : "Pigeon",
     "MENU_OVERVIEW" : "Overview",
+    "MENU_FILES" : "Files",
 
     "LANGUAGE_EN" : "EN",
     "LANGUAGE_RU" : "RU",
@@ -21,6 +22,13 @@
     "TEST_CODE_SHOULD_RETURN_MESSAGE" : "Test code should return boolean value.",
     "TEST_RESPONSE_VARIABLE" : "The variable 'response' contains responseText",
 
+    "BACK_TO_FILES" : "Back to files list",
+    "ADD_FILE" : "Add file",
+    "FILE_NAME" : "File name",
+    "FILE_CODE" : "File code",
+    "FILE_NAME_REQUIRED_MESSAGE" : "You did not enter file name",
+    "FILE_CODE_REQUIRED_MESSAGE" : "You did not enter file code",
+
     "METHOD_OPEN_TAB" : "Open tab",
     "METHOD_GET_REQUEST" : "GET request",
     "METHOD_POST_REQUEST" : "POST request",
@@ -30,6 +38,7 @@
     "ADD_PAGE" : "Add page",
     "HIDE_SUCCESS_TESTS" : "Hide success tests",
 
+    "TABLE_HEADER_NAME" : "Name",
     "TABLE_HEADER_DESCRIPTION" : "Description",
     "TABLE_HEADER_STATUS" : "Status",
     "TABLE_HEADER_EDIT" : "Edit",

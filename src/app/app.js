@@ -5,10 +5,13 @@ angular.module('pigeon.app', [
     'pascalprecht.translate',
 
     'pigeon.pageService',
+    'pigeon.testService',
+    'pigeon.fileService',
 
     'pigeon.testController',
     'pigeon.pageController',
     'pigeon.overviewController',
+    'pigeon.fileController',
 
     'pigeon.sandboxFrame',
 
@@ -18,42 +21,86 @@ angular.module('pigeon.app', [
 .config(['$routeProvider',
     function ($routeProvider) {
     // Add global resolve (init pigeon storage)
-    angular.extend({}, $routeProvider, {
-        when: function (path, route) {
-            route.resolve = (route.resolve) ? route.resolve : {};
-            angular.extend(route.resolve, {
-                data: function (pageService) {
-                    return pageService.init();
-                }
-            });
-            $routeProvider.when(path, route);
-            return this;
-        }
-    })
+    $routeProvider
     .when('/pages', {
         templateUrl: 'app/overview/overview.html',
         controller: 'OverviewController',
-        controllerAs: 'overviewCtrl'
+        controllerAs: 'overviewCtrl',
+        resolve: {
+            data: function ($q, pageService, fileService) {
+                return $q.all([].concat(pageService.init(), fileService.init()));
+            }
+        }
     })
     .when('/pages/add', {
         templateUrl: 'app/page/page-form.html',
         controller: 'PageController',
-        controllerAs: 'pageCtrl'
+        controllerAs: 'pageCtrl',
+        resolve: {
+            data: function (pageService) {
+                return pageService.init();
+            }
+        }
     })
     .when('/pages/edit/:pageIndex', {
         templateUrl: 'app/page/page-form.html',
         controller: 'PageController',
-        controllerAs: 'pageCtrl'
+        controllerAs: 'pageCtrl',
+        resolve: {
+            data: function (pageService) {
+                return pageService.init();
+            }
+        }
     })
     .when('/pages/:pageIndex/tests/add', {
         templateUrl: 'app/page/test/test-form.html',
         controller: 'TestController',
-        controllerAs: 'testCtrl'
+        controllerAs: 'testCtrl',
+        resolve: {
+            data: function (testService) {
+                return testService.init();
+            }
+        }
     })
     .when('/pages/:pageIndex/tests/edit/:testIndex', {
         templateUrl: 'app/page/test/test-form.html',
         controller: 'TestController',
-        controllerAs: 'testCtrl'
+        controllerAs: 'testCtrl',
+        resolve: {
+            data: function (testService) {
+                return testService.init();
+            }
+        }
+    })
+    .when('/files', {
+        templateUrl: 'app/file/files.html',
+        controller: 'FileController',
+        controllerAs: 'fileCtrl',
+        resolve: {
+            data: function (fileService) {
+                return fileService.init();
+            }
+        }
+    })
+    .when('/files/add', {
+        templateUrl: 'app/file/file-form.html',
+        controller: 'FileController',
+        controllerAs: 'fileCtrl',
+        resolve: {
+            data: function (fileService) {
+                return fileService.init();
+            }
+        }
+    })
+    .when('/files/edit/:fileIndex', {
+        templateUrl: 'app/file/file-form.html',
+        controller: 'FileController',
+        controllerAs: 'fileCtrl',
+        resolve: {
+            data: function (fileService) {
+                return fileService.init();
+            }
+        }
     })
     .otherwise({
         redirectTo: '/pages'

@@ -1,6 +1,7 @@
 angular.module('pigeon.overviewService', [
     'pigeon.chromeService',
     'pigeon.pageService',
+    'pigeon.fileService',
 
     'pigeon.statuses',
     'pigeon.methods',
@@ -8,8 +9,8 @@ angular.module('pigeon.overviewService', [
     'pascalprecht.translate',
 ])
 
-.factory('overviewService', ['$q', '$translate', 'chromeService', 'pageService', 'statuses', 'methods',
-    function ($q, $translate, chromeService, pageService, statuses, methods) {
+.factory('overviewService', ['$q', '$translate', 'chromeService', 'pageService', 'fileService', 'statuses', 'methods',
+    function ($q, $translate, chromeService, pageService, fileService, statuses, methods) {
         var _browserService = chromeService;
 
         /**
@@ -20,7 +21,12 @@ angular.module('pigeon.overviewService', [
          * @return {string} Prepared code
          */
         var _prepareCode = function (code) {
-            return '(function() { try {' +
+            var filesCode = '';
+            angular.forEach(fileService.getAll(), function (file) {
+                filesCode += file.code + ' \n';
+            });
+            return filesCode +
+            '(function() { try {' +
                 code +
             '} catch(e) {' +
             'return {value: undefined, errorMessage: e.message};' +

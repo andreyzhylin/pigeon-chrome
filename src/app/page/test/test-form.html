@@ -2,7 +2,7 @@
 	<a href="#/overview">&larr; {{'BACK_TO_OVERVIEW' | translate}}</a>
 </div>
 <div class="row-fluid top-buffer">
-	<form ng-submit="testForm.$valid && testCtrl.saveTest()" role="form" name="testForm" novalidate>
+	<form ng-submit="testForm.$valid && testCtrl.save()" role="form" name="testForm" novalidate>
   		<div class="form-group">
     		<label>{{'TEST_DESCRIPTION' | translate}}</label>
     		<input ng-model="testCtrl.test.description" type="text" class="form-control" placeholder="{{'TEST_DESCRIPTION' | translate}}" name="testDescription" required>
