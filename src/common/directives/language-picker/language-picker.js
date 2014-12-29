@@ -1,21 +1,23 @@
-angular.module('languagePicker', ['pascalprecht.translate'])
+angular.module('languagePicker', [
+    'pascalprecht.translate',
+])
 
-.directive('languagePicker', function () {
+.directive('languagePicker', ['$translate', function ($translate) {
     return {
         restrict: 'E',
-        controller: function ($scope, $translate) {
-            $scope.languages = {
+        templateUrl: 'common/directives/language-picker/language-picker.html',
+        link: function (scope) {
+            scope.languages = {
                 EN: 'en',
                 RU: 'ru'
             };
-            $scope.currentLanguage = $scope.languages.EN;
-            $scope.setLanguage = function (language) {
-                $scope.currentLanguage = language;
+            scope.currentLanguage = scope.languages.EN;
+            scope.setLanguage = function (language) {
+                scope.currentLanguage = language;
                 $translate.use(language);
             };
-        },
-        templateUrl: 'common/directives/language-picker/language-picker.html'
+        }
     };
-})
+}])
 
 ;

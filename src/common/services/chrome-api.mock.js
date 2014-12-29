@@ -1,4 +1,4 @@
-var data = [
+var pages = [
     {
         description: '0 page',
         url: '0 url',
@@ -59,13 +59,37 @@ var data = [
                 description: 'GET request test',
                 code: 'return response.length > 100;',
                 status: 'UNKNOWN',
-                method: 'GET_REQUEST'
+                method: 'GET_REQUEST',
+                params: [
+                    {
+                        key: 'q',
+                        value: '123'
+                    }
+                ]
             },
             {
                 description: 'POST request test',
                 code: 'return response.length < 100;',
                 status: 'UNKNOWN',
-                method: 'POST_REQUEST'
+                method: 'POST_REQUEST',
+                params: [
+                    {
+                        key: 'q',
+                        value: '123'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        description: 'Wrong url',
+        url: 'qwerty',
+        tests: [
+            {
+                description: '',
+                code: 'return true;',
+                status: 'UNKNOWN',
+                method: 'GET_REQUEST'
             }
         ]
     }
@@ -73,16 +97,21 @@ var data = [
 
 chrome.storage = {
     local: {
-        data: [],
+        data: {
+            PAGES: JSON.stringify(pages)
+        },
         get: function (key, callback) {
-            callback(this.data);
+            callback(chrome.storage.local.data);
         },
         set: function (newData) {
-            this.data = newData;
+            for (var key in newData){
+                if (newData.hasOwnProperty(key)) {
+                     this.data[key] = newData[key];
+                }
+            }
         }
     }
 };
-chrome.storage.local.data.PAGES = JSON.stringify(data);
 
 chrome.tabs = {
     create: function (options, callback) {

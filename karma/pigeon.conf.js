@@ -31,20 +31,29 @@ module.exports = function(config) {
         'vendor/angular-ui-codemirror/ui-codemirror.min.js',
 
         'src/common/services/chrome-api.mock.js',
-        'src/common/services/chrome-service.js',
-        'src/common/services/pigeon-core.js',
+        'src/common/services/util.js',
+        'src/common/services/statuses.js',
+        'src/common/services/methods.js',
+        'src/common/services/chrome.service.js',
 
         'src/app/app.js',
 
-        'src/app/overview/overview.js',
-        'src/app/page/page.js',
-        'src/app/page/test/test.js',
+        'src/app/sandbox/sandbox-frame.js',
+
+        'src/app/overview/overview.service.js',
+        'src/app/overview/overview.controller.js',
+
+        'src/app/page/page.service.js',
+        'src/app/page/page.controller.js',
+
+        'src/app/page/test/test.service.js',
+        'src/app/page/test/test.controller.js',
 
         'src/common/directives/language-picker/language-picker.js',
         'src/common/directives/icon.js',
         'src/common/directives/fix-url.js',
         'src/common/directives/should-return-validator.js',
-        'src/common/directives/sandbox-frame.js',
+        'src/common/directives/test-status/test-status.js',
 
         'src/**/*.spec.js'
     ],
