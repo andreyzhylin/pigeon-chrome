@@ -84,7 +84,7 @@ angular.module('pigeon.overviewService', [
             test.status = _determineStatus(result.value);
             test.errorMessage = result.errorMessage;
             if (test.status === statuses.ERROR && test.errorMessage === '') {
-                test.errorMessage = $translate.instant('ERROR_NOT_BOOLEAN') + '\'' + result.value + '\'';
+                test.errorMessage = $translate.instant('ERROR_NOT_BOOLEAN', {value: '\'' + result.value + '\''});
             }
         };
 
@@ -148,9 +148,8 @@ angular.module('pigeon.overviewService', [
                         });
                     } else {
                         var errorMessage = request.status === 0 ? $translate.instant('ERROR_URL_NOT_FOUND') :
-                            $translate.instant('ERROR_REQUEST_STATUS') +
-                            request.status +
-                            ' (' + request.statusText + ')';
+                            $translate.instant('ERROR_REQUEST_STATUS',
+                                {status: request.status +' (' + request.statusText + ')'});
                         _completeExecution(test, {value: undefined, errorMessage: errorMessage});
                         deferred.resolve(test);
                     }

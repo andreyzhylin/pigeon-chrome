@@ -52,7 +52,7 @@
     "TOOLTIP_REFRESH_PAGE_UNSUCCESS_TESTS" : "Refresh unsuccessful tests",
     "TOOLTIP_REFRESH_TEST" : "Refresh test",
 
-    "ERROR_REQUEST_STATUS" : "Request status: ",
+    "ERROR_REQUEST_STATUS" : "Request status: {{ status }}",
     "ERROR_URL_NOT_FOUND" : "Page URL not found",
-    "ERROR_NOT_BOOLEAN" : "Expected 'Boolean' value, returned: "
+    "ERROR_NOT_BOOLEAN" : "Expected 'Boolean' value, returned: {{ value }}"
 }

@@ -29,7 +29,7 @@
     "FILE_NAME_REQUIRED_MESSAGE" : "Вы не ввели название файла",
     "FILE_CODE_REQUIRED_MESSAGE" : "Вы не ввели код файла",
 
-    "METHOD_TAB_OPEN" : "Открытие вкладки",
+    "METHOD_OPEN_TAB" : "Открытие вкладки",
     "METHOD_GET_REQUEST" : "GET запрос",
     "METHOD_POST_REQUEST" : "POST запрос",
 
@@ -52,7 +52,7 @@
     "TOOLTIP_REFRESH_PAGE_UNSUCCESS_TESTS" : "Запустить неудачные тесты на странице",
     "TOOLTIP_REFRESH_TEST" : "Запустить тест",
 
-    "ERROR_REQUEST_STATUS" : "Статус запроса: ",
+    "ERROR_REQUEST_STATUS" : "Статус запроса: {{ status }}",
     "ERROR_URL_NOT_FOUND" : "Адрес страницы не найден",
-    "ERROR_NOT_BOOLEAN" : "Ожидалось значение типа 'Boolean', получено: "
+    "ERROR_NOT_BOOLEAN" : "Ожидалось значение типа 'Boolean', получено: {{ value }}"
 }
