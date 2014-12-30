@@ -41,12 +41,12 @@ angular.module('pigeon.overviewController', [
             overviewService.executeTest(test);
         };
 
-        this.refreshPage = function (page) {
-            overviewService.executePage(page);
+        this.refreshPage = function (page, onlySuccess) {
+            overviewService.executePage(page, onlySuccess);
         };
 
-        this.refreshAll = function () {
-            overviewService.executeAll(this.pages);
+        this.refreshAll = function (onlySuccess) {
+            overviewService.executeAll(this.pages, onlySuccess);
         };
     }
 ])

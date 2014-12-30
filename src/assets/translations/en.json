@@ -47,7 +47,9 @@
     "TABLE_HEADER_LINK" : "Link",
 
     "TOOLTIP_REFRESH_ALL_TESTS" : "Refresh all tests",
+    "TOOLTIP_REFRESH_ALL_UNSUCCESS_TESTS" : "Refresh all unsuccessful tests",
     "TOOLTIP_REFRESH_PAGE_TESTS" : "Refresh page tests",
+    "TOOLTIP_REFRESH_PAGE_UNSUCCESS_TESTS" : "Refresh unsuccessful tests",
     "TOOLTIP_REFRESH_TEST" : "Refresh test",
 
     "ERROR_REQUEST_STATUS" : "Request status: ",

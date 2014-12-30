@@ -211,18 +211,20 @@ angular.module('pigeon.overviewService', [
              * @description
              * Executes all tests on page.
              *
-             * @param  {object} page Page to execute
-             * @return {object} $q promise
+             * @param  {object}  page        Page to execute
+             * @param  {Boolean} onlySuccess `true` if should execute only unsuccessfull tests
+             * @return {object}  $q promise
              */
-            executePage: function (page) {
+            executePage: function (page, onlySuccess) {
                 var requestPromises = [];
                 var scriptPromises = [];
                 if (_isPageExecuting(page)) {
                     return $q.defer().reject();
                 }
                 angular.forEach(page.tests, function (test) {
-                    _initExecution(test);
-                    if (test.method !== methods.OPEN_TAB) {
+                    if (test.method !== methods.OPEN_TAB &&
+                        (!onlySuccess || test.status !== statuses.SUCCESS)) {
+                        _initExecution(test);
                         requestPromises.push(_executeRequest(test));
                     }
                 });
@@ -230,7 +232,9 @@ angular.module('pigeon.overviewService', [
                 if (_hasPageOnTabScripts(page)) {
                     _browserService.openPage(page.url).then(function (tabId) {
                         angular.forEach(page.tests, function (test) {
-                            if (test.method === methods.OPEN_TAB) {
+                            if (test.method === methods.OPEN_TAB &&
+                                (!onlySuccess || test.status !== statuses.SUCCESS)) {
+                                _initExecution(test);
                                 scriptPromises.push(_executeScript(tabId, test));
                             }
                         });
@@ -252,13 +256,14 @@ angular.module('pigeon.overviewService', [
              * @description
              * Executes all tests on specified pages
              *
-             * @param  {array}  pages Array of pages to execute
-             * @return {object} $q promise
+             * @param  {array}   pages       Array of pages to execute
+             * @param  {Boolean} onlySuccess `true` if should execute only unsuccessfull tests
+             * @return {object}  $q promise
              */
-            executeAll: function (pages) {
+            executeAll: function (pages, onlySuccess) {
                 var promises = [];
                 angular.forEach(pages, function (page) {
-                    promises.push(pigeon.executePage(page));
+                    promises.push(pigeon.executePage(page, onlySuccess));
                 });
                 return $q.all(promises).then(function () {
                     pageService.save();

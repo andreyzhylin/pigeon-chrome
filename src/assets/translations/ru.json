@@ -47,7 +47,9 @@
     "TABLE_HEADER_LINK" : "Перейти",
 
     "TOOLTIP_REFRESH_ALL_TESTS" : "Запустить все тесты",
+    "TOOLTIP_REFRESH_ALL_UNSUCCESS_TESTS" : "Запустить все неудачные тесты",
     "TOOLTIP_REFRESH_PAGE_TESTS" : "Запустить тесты на странице",
+    "TOOLTIP_REFRESH_PAGE_UNSUCCESS_TESTS" : "Запустить неудачные тесты на странице",
     "TOOLTIP_REFRESH_TEST" : "Запустить тест",
 
     "ERROR_REQUEST_STATUS" : "Статус запроса: ",
