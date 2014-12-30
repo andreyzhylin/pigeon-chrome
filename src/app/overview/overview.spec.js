@@ -137,9 +137,10 @@ describe('Pigeon', function () {
     });
 
     describe('OverviewController', function () {
-        beforeEach(inject(function (_$controller_) {
+        beforeEach(inject(function ($rootScope, _$controller_) {
+            $scope = $rootScope.$new();
             this.controller = _$controller_('OverviewController', {
-                $scope: {},
+                $scope: $scope,
                 pageService: pageService,
                 testService: testService,
                 overviewService: overviewService,
@@ -149,21 +150,21 @@ describe('Pigeon', function () {
 
         describe('on init', function () {
             it('should load pages', function () {
-                expect(this.controller.pages).toBe(pageService.getAll());
+                expect($scope.pages).toBe(pageService.getAll());
             });
         });
 
         describe('countTests', function () {
             it('should count ERROR tests', function () {
-                var count = this.controller.countTests(this.controller.pages[0], statuses.ERROR);
+                var count = this.controller.countTests($scope.pages[0], statuses.ERROR);
                 expect(count).toBe(2);
             });
             it('should count SUCCESS tests', function () {
-                var count = this.controller.countTests(this.controller.pages[0], statuses.SUCCESS);
+                var count = this.controller.countTests($scope.pages[0], statuses.SUCCESS);
                 expect(count).toBe(1);
             });
             it('should count FAILED tests', function () {
-                var count = this.controller.countTests(this.controller.pages[0], statuses.FAILED);
+                var count = this.controller.countTests($scope.pages[0], statuses.FAILED);
                 expect(count).toBe(1);
             });
         });

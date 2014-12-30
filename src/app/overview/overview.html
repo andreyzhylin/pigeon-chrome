@@ -23,15 +23,15 @@
 		<th class="col-md-1">{{'TABLE_HEADER_LINK' | translate}}</th>
 	</tr>
 	</thead>
-	<tbody ng-repeat="page in overviewCtrl.pages">
+	<tbody ng-repeat="page in pages">
 		<tr class="info">
 			<th>{{ page.description }}</th>
 			<th>
-				<span class="status-success">{{ overviewCtrl.countTests(page, overviewCtrl.statuses.SUCCESS) || 0 }}</span>
+				<span class="status-success">{{ overviewCtrl.countTests(page, statuses.SUCCESS) || 0 }}</span>
 				<span class="divider"> / </span>
-				<span class="status-failed">{{ overviewCtrl.countTests(page, overviewCtrl.statuses.FAILED) + overviewCtrl.countTests(page, overviewCtrl.statuses.ERROR) || 0 }}</span>
+				<span class="status-failed">{{ overviewCtrl.countTests(page, statuses.FAILED) + overviewCtrl.countTests(page, statuses.ERROR) || 0 }}</span>
 				<span class="divider"> / </span>
-				<span class="status-unknown">{{ overviewCtrl.countTests(page, overviewCtrl.statuses.UNKNOWN) || 0 }}</span>
+				<span class="status-unknown">{{ overviewCtrl.countTests(page, statuses.UNKNOWN) || 0 }}</span>
 			</th>
 			<th>
 				<span ng-click="overviewCtrl.refreshPage(page)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_PAGE_TESTS' | translate}}"></span>

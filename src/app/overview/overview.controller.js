@@ -10,10 +10,12 @@ angular.module('pigeon.overviewController', [
     'icon',
 ])
 
-.controller('OverviewController', ['pageService', 'testService', 'overviewService', 'statuses',
-    function (pageService, testService, overviewService, statuses) {
+.controller('OverviewController', ['$scope', 'pageService', 'testService', 'overviewService', 'statuses',
+    function ($scope, pageService, testService, overviewService, statuses) {
         this.shouldHideSuccess = false;
-        this.pages = pageService.getAll();
+
+        $scope.pages = pageService.getAll();
+        $scope.statuses = statuses;
 
         this.countTests = function (page, status) {
             var count = 0;
@@ -46,7 +48,7 @@ angular.module('pigeon.overviewController', [
         };
 
         this.refreshAll = function (onlySuccess) {
-            overviewService.executeAll(this.pages, onlySuccess);
+            overviewService.executeAll($scope.pages, onlySuccess);
         };
     }
 ])

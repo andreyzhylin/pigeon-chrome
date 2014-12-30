@@ -67,7 +67,7 @@ angular.module('pigeon.testService', [
             test.isExecuting = false;
             test.page = pageService.get(pageIndex);
             if (!angular.isDefined(test.page.tests)) {
-                _pages[pageIndex].tests = [];
+                test.page.tests = [];
             }
             test.params = _filterParams(test.params);
             test.page.tests.push(test);
