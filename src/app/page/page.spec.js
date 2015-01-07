@@ -53,6 +53,7 @@ describe('pageService', function () {
         var page0 = pageService.get(0);
         expect(page0.url).not.toBe(page.url);
         page0.tests.forEach(function (test) {
+            test.status = statuses.ERROR;
             expect(test.status).not.toBe(statuses.UNKNOWN);
         });
         pageService.edit(page, 0);
@@ -87,23 +88,26 @@ describe('PageController', function () {
 
     describe('on adding page', function () {
         beforeEach(inject(function (_$controller_) {
-            this.controller = _$controller_('PageController', {$scope: {}, $routeParams: {}, pageService: pageService});
+            $scope = $rootScope.$new();
+            this.controller = _$controller_('PageController',
+                {$scope: $scope, $routeParams: {}, pageService: pageService}
+            );
         }));
 
         it('should has empty model', function () {
-            expect(this.controller.page).toBeDefined();
-            expect(this.controller.page.description).toBeUndefined();
-            expect(this.controller.page.url).toBeUndefined();
+            expect($scope.page).toBeDefined();
+            expect($scope.page.description).toBeUndefined();
+            expect($scope.page.url).toBeUndefined();
         });
 
         it('should save model', function () {
-            this.controller.page.description = 'Add page';
-            this.controller.page.url = 'Add url';
+            $scope.page.description = 'Add page';
+            $scope.page.url = 'Add url';
 
             var pages = pageService.getAll();
-            expect(pages).not.toContain(this.controller.page);
+            expect(pages).not.toContain($scope.page);
             this.controller.save();
-            expect(pages).toContain(this.controller.page);
+            expect(pages).toContain($scope.page);
             pageService.remove(pages[pages.length - 1]);
         });
     });
@@ -111,30 +115,31 @@ describe('PageController', function () {
     describe('on edition page', function () {
         beforeEach(inject(function (_$controller_) {
             this.pageIndex = 0;
+            $scope = $rootScope.$new();
             this.controller = _$controller_('PageController',
-                {$scope: {}, $routeParams: {pageIndex: this.pageIndex}, pageService: pageService});
+                {$scope: $scope, $routeParams: {pageIndex: this.pageIndex}, pageService: pageService});
         }));
 
         it('should load model', function () {
             var pages = pageService.getAll();
 
-            expect(this.controller.page).toBeDefined();
-            expect(this.controller.page.description).toBe(pages[this.pageIndex].description);
-            expect(this.controller.page.url).toBe(pages[this.pageIndex].url);
+            expect($scope.page).toBeDefined();
+            expect($scope.page.description).toBe(pages[this.pageIndex].description);
+            expect($scope.page.url).toBe(pages[this.pageIndex].url);
         });
 
         it('should save model', function () {
-            this.controller.page.description = 'Edit page';
-            this.controller.page.url = 'Edit url';
+            $scope.page.description = 'Edit page';
+            $scope.page.url = 'Edit url';
 
             var pages = pageService.getAll();
             var page = pageService.get(this.pageIndex);
-            expect(page.description).not.toBe(this.controller.page.description);
-            expect(page.url).not.toBe(this.controller.page.url);
+            expect(page.description).not.toBe($scope.page.description);
+            expect(page.url).not.toBe($scope.page.url);
             this.controller.save();
             page = pageService.get(this.pageIndex);
-            expect(page.description).toBe(this.controller.page.description);
-            expect(page.url).toBe(this.controller.page.url);
+            expect(page.description).toBe($scope.page.description);
+            expect(page.url).toBe($scope.page.url);
         });
     });
 });

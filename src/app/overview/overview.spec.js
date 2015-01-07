@@ -4,18 +4,18 @@ describe('Pigeon', function () {
     beforeEach(module('pigeon.fileService'));
     beforeEach(module('pigeon.overviewService'));
     beforeEach(module('pigeon.statuses'));
-    beforeEach(module('pigeon.methods'));
     beforeEach(module('pigeon.overviewController'));
 
-    beforeEach(inject(function (_$rootScope_, _pageService_, _testService_, _fileService_, _overviewService_, _statuses_, _methods_) {
-        $rootScope = _$rootScope_;
-        pageService = _pageService_;
-        testService = _testService_;
-        fileService = _fileService_;
-        overviewService = _overviewService_;
-        statuses = _statuses_;
-        methods = _methods_;
-    }));
+    beforeEach(inject(
+        function (_$rootScope_, _pageService_, _testService_, _fileService_, _overviewService_, _statuses_) {
+            $rootScope = _$rootScope_;
+            pageService = _pageService_;
+            testService = _testService_;
+            fileService = _fileService_;
+            overviewService = _overviewService_;
+            statuses = _statuses_;
+        }
+    ));
 
     beforeEach(function (done) {
         pageService.init();
@@ -36,6 +36,9 @@ describe('Pigeon', function () {
                     expect(successTest.status).toBe(statuses.SUCCESS);
                     expect(successTest.isExecuting).toBeFalsy();
                     expect(successTest.errorMessage).toBe('');
+                    pageService.init().then(function () {
+                        expect(pageService.get(0).tests[0].status).toBe(statuses.SUCCESS);
+                    });
                 });
                 expect(successTest.status).toBe(statuses.UNKNOWN);
                 expect(successTest.isExecuting).toBeTruthy();
@@ -47,7 +50,7 @@ describe('Pigeon', function () {
                 var failedTest = this.page.tests[1];
                 overviewService.executeTest(failedTest).then(function () {
                     expect(failedTest.status).toBe(statuses.FAILED);
-                    expect(failedTest.errorMessage).toBe('');
+                    expect(failedTest.errorMessage).toMatch('Always FAILED');
                 });
                 $rootScope.$digest();
                 done();
@@ -72,9 +75,23 @@ describe('Pigeon', function () {
                     expect(successTest.isExecuting).toBeFalsy();
                     expect(successTest.errorMessage).toBe('');
                     expect(failedTest.status).toBe(statuses.FAILED);
-                    expect(failedTest.errorMessage).toBe('');
+                    expect(failedTest.errorMessage).toMatch('Always FAILED');
                     expect(errorTest.status).toBe(statuses.ERROR);
                     expect(errorTest.errorMessage).toMatch(/ERROR_NOT_BOOLEAN/);
+                    expect(pageService.get(0).tests[3].status).toBe(statuses.ERROR);
+                    pageService.init().then(function () {
+                        expect(pageService.get(0).tests[3].status).toBe(statuses.ERROR);
+                    });
+                });
+                $rootScope.$digest();
+                done();
+            });
+
+            it('should correctly execute tests with exceptions', function (done) {
+                var errorTest = this.page.tests[3];
+                overviewService.executeTest(errorTest).then(function () {
+                    expect(errorTest.status).toBe(statuses.ERROR);
+                    expect(errorTest.errorMessage).toMatch('of undefined');
                 });
                 $rootScope.$digest();
                 done();
@@ -83,53 +100,11 @@ describe('Pigeon', function () {
             it('should execute all files before tests', function (done) {
                 var test = this.page.tests[0];
                 var oldCode = test.code;
-                test.code = 'return myModule.test === 42;'
+                test.code = 'pigeon.expect(\'File are loaded\', myModule.test === 42); pigeon.resolve();';
                 overviewService.executeTest(test).then(function () {
                     expect(test.status).toBe(statuses.SUCCESS);
                     test.code = oldCode;
                 });
-                $rootScope.$digest();
-                done();
-            });
-        });
-
-        describe('while executing requests', function () {
-            beforeEach(function () {
-                this.page = pageService.get(3);
-                jasmine.Ajax.install();
-            });
-
-            afterEach(function () {
-                jasmine.Ajax.uninstall();
-            });
-
-            it('should correctly form GET request', function () {
-                var test = this.page.tests[1];
-                overviewService.executeTest(test);
-                var request = jasmine.Ajax.requests.mostRecent();
-                expect(request.url).toBe('http://google.com?q=123&');
-                expect(request.params).toBe(null);
-                expect(request.method).toBe('GET');
-            });
-
-            it('should correctly form POST request', function () {
-                var test = this.page.tests[2];
-                overviewService.executeTest(test);
-                var request = jasmine.Ajax.requests.mostRecent();
-                expect(request.url).toBe('http://google.com');
-                expect(request.method).toBe('POST');
-                expect(request.params).toBe('q=123&');
-                expect(request.requestHeaders['Content-type']).toBe('application/x-www-form-urlencoded');
-            });
-
-            it('should correctly execute page with different methods', function (done) {
-                var successTest = this.page.tests[0];
-                overviewService.executePage(this.page).then(function () {
-                    expect(successTest.status).toBe(statuses.SUCCESS);
-                    expect(successTest.isExecuting).toBeFalsy();
-                    expect(successTest.errorMessage).toBe('');
-                });
-                expect(jasmine.Ajax.requests.count()).toBe(2);
                 $rootScope.$digest();
                 done();
             });
@@ -155,17 +130,32 @@ describe('Pigeon', function () {
         });
 
         describe('countTests', function () {
-            it('should count ERROR tests', function () {
-                var count = this.controller.countTests($scope.pages[0], statuses.ERROR);
-                expect(count).toBe(2);
+            it('should count ERROR tests', function (done) {
+                var countTests = this.controller.countTests;
+                overviewService.executePage($scope.pages[0]).then(function () {
+                    var count = countTests($scope.pages[0], statuses.ERROR);
+                    expect(count).toBe(2);
+                });
+                $rootScope.$digest();
+                done();
             });
-            it('should count SUCCESS tests', function () {
-                var count = this.controller.countTests($scope.pages[0], statuses.SUCCESS);
-                expect(count).toBe(1);
+            it('should count SUCCESS tests', function (done) {
+                var countTests = this.controller.countTests;
+                overviewService.executePage($scope.pages[0]).then(function () {
+                    var count = countTests($scope.pages[0], statuses.SUCCESS);
+                    expect(count).toBe(1);
+                });
+                $rootScope.$digest();
+                done();
             });
-            it('should count FAILED tests', function () {
-                var count = this.controller.countTests($scope.pages[0], statuses.FAILED);
-                expect(count).toBe(1);
+            it('should count FAILED tests', function (done) {
+                var countTests = this.controller.countTests;
+                overviewService.executePage($scope.pages[0]).then(function () {
+                    var count = countTests($scope.pages[0], statuses.FAILED);
+                    expect(count).toBe(1);
+                });
+                $rootScope.$digest();
+                done();
             });
         });
 

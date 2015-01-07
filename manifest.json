@@ -3,13 +3,10 @@
 
 	"name": "Pigeon",
 	"description": "Tool for chrome extension testing.",
-	"version": "1.0.2",
+	"version": "1.1.0",
 
 	"permissions": [
 		"tabs", "<all_urls>", "storage", "notifications"
 	],
-	"options_page": "src/index.html",
-	"sandbox": {
-		"pages": ["src/app/sandbox/sandbox.html"]
-	}
+	"options_page": "src/index.html"
 }

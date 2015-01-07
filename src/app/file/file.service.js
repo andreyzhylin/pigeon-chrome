@@ -4,9 +4,11 @@ angular.module('pigeon.fileService', [
     'pigeon.util',
 ])
 
-.factory('fileService', ['$q', 'chromeService', 'util', 'statuses', function ($q, chromeService, util, statuses) {
+.factory('fileService', ['$q', 'chromeService', 'util', function ($q, chromeService, util) {
     var _files = [];
     var _browserService = chromeService;
+
+    var STORAGE_FILES_KEY = 'FILES';
 
     /**
      * @description
@@ -14,7 +16,7 @@ angular.module('pigeon.fileService', [
      */
     var _saveData = function () {
         var data = JSON.stringify(_files);
-        _browserService.saveData(util.STORAGE_FILES_KEY, data);
+        _browserService.saveData(STORAGE_FILES_KEY, data);
     };
 
     /**
@@ -24,8 +26,8 @@ angular.module('pigeon.fileService', [
      * @param  {string} data Storage data in JSON
      * @return {array}  Files
      */
-    var _prepareFiles = function (data) {
-        var files = JSON.parse(data[util.STORAGE_FILES_KEY]);
+    var _prepare = function (data) {
+        var files = JSON.parse(data[STORAGE_FILES_KEY]);
         return angular.isDefined(files) ? files : [];
     };
 
@@ -38,8 +40,8 @@ angular.module('pigeon.fileService', [
          */
         init: function () {
             var deferred = $q.defer();
-            _browserService.loadData(util.STORAGE_FILES_KEY).then(function (data) {
-                _files = _prepareFiles(data);
+            _browserService.loadData(STORAGE_FILES_KEY).then(function (data) {
+                _files = _prepare(data);
                 deferred.resolve();
             });
             return deferred.promise;

@@ -9,6 +9,8 @@ angular.module('pigeon.pageService', [
     var _pages = [];
     var _browserService = chromeService;
 
+    var STORAGE_PAGES_KEY = 'PAGES';
+
     /**
      * @description
      * Saves pages to browser storage.
@@ -18,7 +20,7 @@ angular.module('pigeon.pageService', [
             // pages array has circular structure, we should remove links to pages
             return key === 'page' ? undefined : value;
         });
-        _browserService.saveData(util.STORAGE_PAGES_KEY, data);
+        _browserService.saveData(STORAGE_PAGES_KEY, data);
     };
 
     /**
@@ -28,8 +30,8 @@ angular.module('pigeon.pageService', [
      * @param  {string} data Storage data in JSON
      * @return {array} Pages
      */
-    var _preparePages = function (data) {
-        var pages = JSON.parse(data[util.STORAGE_PAGES_KEY]);
+    var _prepare = function (data) {
+        var pages = JSON.parse(data[STORAGE_PAGES_KEY]);
         angular.forEach(pages, function (page) {
             angular.forEach(page.tests, function (test) {
                 test.page = page;
@@ -48,10 +50,12 @@ angular.module('pigeon.pageService', [
          */
         init: function () {
             var deferred = $q.defer();
-            _browserService.loadData(util.STORAGE_PAGES_KEY).then(function (data) {
-                _pages = _preparePages(data);
+
+            _browserService.loadData(STORAGE_PAGES_KEY).then(function (data) {
+                _pages = _prepare(data);
                 deferred.resolve();
             });
+
             return deferred.promise;
         },
 
@@ -103,6 +107,7 @@ angular.module('pigeon.pageService', [
 
             _pages[pageIndex].description = page.description;
             _pages[pageIndex].url = page.url;
+            _pages[pageIndex].isNewWindow = page.isNewWindow;
             _saveData();
         },
 

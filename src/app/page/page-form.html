@@ -5,16 +5,23 @@
   <form ng-submit="pageForm.$valid && pageCtrl.save()" role="form" name="pageForm" novalidate>
       <div class="form-group">
         <label>{{'PAGE_DESCRIPTION' | translate}}</label>
-        <input ng-model="pageCtrl.page.description" type="text" class="form-control" placeholder="{{'PAGE_DESCRIPTION' | translate}}" name="pageDescription">
+        <input ng-model="page.description" type="text" class="form-control" placeholder="{{'PAGE_DESCRIPTION' | translate}}" name="pageDescription">
       </div>
       <div class="form-group">
         <label>{{'PAGE_URL' | translate}}</label>
-        <input ng-model="pageCtrl.page.url" type="url" class="form-control" placeholder="http://www.example.com" name="pageUrl" required fix-url>
+        <input ng-model="page.url" type="url" class="form-control" placeholder="http://www.example.com" name="pageUrl" required fix-url>
         <div ng-messages="pageForm.pageUrl.$error" class="help-block validation-message">
           <div ng-message="required">{{'PAGE_URL_REQUIRED_MESSAGE' | translate}}</div>
           <div ng-message="url">{{'PAGE_URL_VALIDATION_MESSAGE' | translate}}</div>
         </div>
       </div>
-      <input type="submit" class="btn btn-default" value="{{'FORM_SUBMIT' | translate}}">
+      <div class="checkbox">
+        <label>
+          <input ng-model="page.isNewWindow" type="checkbox"> {{'PAGE_NEW_WINDOW' | translate}}
+        </label>
+      </div>
+      <div class="form-group">
+        <input type="submit" class="btn btn-default" value="{{'FORM_SUBMIT' | translate}}">
+      </div>
   </form>
 </div>

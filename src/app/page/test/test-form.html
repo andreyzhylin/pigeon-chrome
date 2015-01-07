@@ -5,33 +5,25 @@
 	<form ng-submit="testForm.$valid && testCtrl.save()" role="form" name="testForm" novalidate>
   		<div class="form-group">
     		<label>{{'TEST_DESCRIPTION' | translate}}</label>
-    		<input ng-model="testCtrl.test.description" type="text" class="form-control" placeholder="{{'TEST_DESCRIPTION' | translate}}" name="testDescription" required>
+    		<input ng-model="test.description" type="text" class="form-control" placeholder="{{'TEST_DESCRIPTION' | translate}}" name="testDescription" required>
         <div ng-messages="testForm.testDescription.$error" class="help-block validation-message">
           <div ng-message="required">{{'TEST_DESCRIPTION_REQUIRED_MESSAGE' | translate}}</div>
         </div>
   		</div>
-      <div class="form-group">
-        <label>{{'TEST_METHOD' | translate}}</label>
-        <select ng-model="testCtrl.test.method" ng-options="method.value as method.name | translate for method in testCtrl.methods">
-        </select>
-      </div>
-      <div ng-show="testCtrl.isRequest()" class="form-group test-params">
-        <label>{{'TEST_PARAMS' | translate}}</label>
-        <div ng-click="testCtrl.test.params.push({key: '', value: ''});" class="btn btn-default"><span icon="plus"></span>{{'TEST_ADD_PARAM' | translate}}</div>
-        <div ng-repeat="param in testCtrl.test.params" class="form-inline">
-          <input ng-model="param.key" class="form-control" placeholder="key">
-          <input ng-model="param.value" class="form-control" placeholder="value">
-        </div>
-      </div>
   		<div class="form-group">
     		<label>{{'TEST_CODE' | translate}}</label>
         <p class="help-block" ng-show="testCtrl.isRequest()">{{'TEST_RESPONSE_VARIABLE' | translate}}</p>
-        <ui-codemirror ng-model="testCtrl.test.code" ui-codemirror-opts="testCtrl.editorOptions" name="testCode" required should-return></ui-codemirror>
+        <ui-codemirror ng-model="test.code" ui-codemirror-opts="testCtrl.editorOptions" name="testCode" required></ui-codemirror>
         <div ng-messages="testForm.testCode.$error" class="help-block validation-message">
           <div ng-message="required">{{'TEST_CODE_REQUIRED_MESSAGE' | translate}}</div>
           <div ng-message="shouldReturn">{{'TEST_CODE_SHOULD_RETURN_MESSAGE' | translate}}</div>
         </div>
   		</div>
+      <div class="checkbox">
+        <label>
+          <input ng-model="test.isDebug" type="checkbox"> {{'TEST_IS_DEBUG' | translate}}
+        </label>
+      </div>
   		<input type="submit" class="btn btn-default" value="{{'FORM_SUBMIT' | translate}}">
 	</form>
 </div>

@@ -69,23 +69,26 @@ describe('FileController', function () {
 
     describe('on adding file', function () {
         beforeEach(inject(function (_$controller_) {
-            this.controller = _$controller_('FileController', {$scope: {}, $routeParams: {}, fileService: fileService});
+            $scope = $rootScope.$new();
+            this.controller = _$controller_('FileController', {
+                $scope: $scope, $routeParams: {}, fileService: fileService
+            });
         }));
 
         it('should has empty model', function () {
-            expect(this.controller.file).toBeDefined();
-            expect(this.controller.file.name).toBeUndefined();
-            expect(this.controller.file.code).toBeUndefined();
+            expect($scope.file).toBeDefined();
+            expect($scope.file.name).toBeUndefined();
+            expect($scope.file.code).toBeUndefined();
         });
 
         it('should save model', function () {
-            this.controller.file.name = 'Add file';
-            this.controller.file.code = 'Add code';
+            $scope.file.name = 'Add file';
+            $scope.file.code = 'Add code';
 
             var files = fileService.getAll();
-            expect(files).not.toContain(this.controller.file);
+            expect(files).not.toContain($scope.file);
             this.controller.save();
-            expect(files).toContain(this.controller.file);
+            expect(files).toContain($scope.file);
             fileService.remove(files[files.length - 1]);
         });
     });
@@ -93,30 +96,31 @@ describe('FileController', function () {
     describe('on edition file', function () {
         beforeEach(inject(function (_$controller_) {
             this.fileIndex = 1;
+            $scope = $rootScope.$new();
             this.controller = _$controller_('FileController',
-                {$scope: {}, $routeParams: {fileIndex: this.fileIndex}, fileService: fileService});
+                {$scope: $scope, $routeParams: {fileIndex: this.fileIndex}, fileService: fileService});
         }));
 
         it('should load model', function () {
             var files = fileService.getAll();
 
-            expect(this.controller.file).toBeDefined();
-            expect(this.controller.file.name).toBe(files[this.fileIndex].name);
-            expect(this.controller.file.code).toBe(files[this.fileIndex].code);
+            expect($scope.file).toBeDefined();
+            expect($scope.file.name).toBe(files[this.fileIndex].name);
+            expect($scope.file.code).toBe(files[this.fileIndex].code);
         });
 
         it('should save model', function () {
-            this.controller.file.name = 'Edit file';
-            this.controller.file.code = 'var a = 123;';
+            $scope.file.name = 'Edit file';
+            $scope.file.code = 'var a = 123;';
 
             var files = fileService.getAll();
             var file = fileService.get(this.fileIndex);
-            expect(file.name).not.toBe(this.controller.file.name);
-            expect(file.code).not.toBe(this.controller.file.code);
+            expect(file.name).not.toBe($scope.file.name);
+            expect(file.code).not.toBe($scope.file.code);
             this.controller.save();
             file = fileService.get(this.fileIndex);
-            expect(file.name).toBe(this.controller.file.name);
-            expect(file.code).toBe(this.controller.file.code);
+            expect(file.name).toBe($scope.file.name);
+            expect(file.code).toBe($scope.file.code);
         });
     });
 });

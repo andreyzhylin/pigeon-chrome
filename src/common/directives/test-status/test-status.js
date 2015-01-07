@@ -1,8 +1,10 @@
 angular.module('pigeon.testStatus', [
     'pigeon.statuses',
+
+    'pascalprecht.translate',
 ])
 
-.directive('testStatus', ['statuses', function (statuses) {
+.directive('testStatus', ['$translate', 'statuses', function ($translate, statuses) {
     var statusCssClasses = [];
     statusCssClasses[statuses.UNKNOWN] = 'status-unknown';
     statusCssClasses[statuses.SUCCESS] = 'status-success';
@@ -10,10 +12,10 @@ angular.module('pigeon.testStatus', [
     statusCssClasses[statuses.ERROR] = 'status-error';
 
     var statusNames = [];
-    statusNames[statuses.UNKNOWN] = 'UNKNOWN';
-    statusNames[statuses.SUCCESS] = 'SUCCESS';
-    statusNames[statuses.FAILED] = 'FAILED';
-    statusNames[statuses.ERROR] = 'ERROR';
+    statusNames[statuses.UNKNOWN] = 'TEST_STATUS_UNKNOWN';
+    statusNames[statuses.SUCCESS] = 'TEST_STATUS_SUCCESS';
+    statusNames[statuses.FAILED] = 'TEST_STATUS_FAILED';
+    statusNames[statuses.ERROR] = 'TEST_STATUS_ERROR';
 
     return {
         restrict: 'E',
@@ -21,8 +23,10 @@ angular.module('pigeon.testStatus', [
         link: function (scope) {
             scope.$watch('test.status', function (value) {
                 scope.statusClass = statusCssClasses[value];
-                scope.statusName = statusNames[value];
-                scope.shouldShowErrorMessage = value === statuses.ERROR;
+                $translate(statusNames[value]).then(function (translatedName) {
+                    scope.statusName = translatedName;
+                });
+                scope.shouldShowErrorMessage = value === statuses.ERROR || value === statuses.FAILED;
             });
         }
     };

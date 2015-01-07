@@ -11,6 +11,7 @@
     "PAGE_URL" : "Page URL",
     "PAGE_URL_REQUIRED_MESSAGE" : "You did not enter URL.",
     "PAGE_URL_VALIDATION_MESSAGE" : "Not valid URL.",
+    "PAGE_NEW_WINDOW" : "Open page in new window? (tab will be active while test is executing)",
 
     "TEST_DESCRIPTION" : "Test description",
     "TEST_DESCRIPTION_REQUIRED_MESSAGE" : "You did not enter test description",
@@ -19,8 +20,7 @@
     "TEST_ADD_PARAM" : "Add param",
     "TEST_CODE" : "Test code (javascript)",
     "TEST_CODE_REQUIRED_MESSAGE" : "You did not enter test code.",
-    "TEST_CODE_SHOULD_RETURN_MESSAGE" : "Test code should return boolean value.",
-    "TEST_RESPONSE_VARIABLE" : "The variable 'response' contains responseText",
+    "TEST_IS_DEBUG" : "Debug mode (without timeout and closing tab)",
 
     "BACK_TO_FILES" : "Back to files list",
     "ADD_FILE" : "Add file",
@@ -45,6 +45,11 @@
     "TABLE_HEADER_REMOVE" : "Remove",
     "TABLE_HEADER_ADD_TEST" : "Add test",
     "TABLE_HEADER_LINK" : "Link",
+
+    "TEST_STATUS_UNKNOWN" : "Unknown",
+    "TEST_STATUS_SUCCESS" : "Success",
+    "TEST_STATUS_FAILED" : "Failed",
+    "TEST_STATUS_ERROR" : "Error",
 
     "TOOLTIP_REFRESH_ALL_TESTS" : "Refresh all tests",
     "TOOLTIP_REFRESH_ALL_UNSUCCESS_TESTS" : "Refresh all unsuccessful tests",

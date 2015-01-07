@@ -11,7 +11,7 @@
 	</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="file in fileCtrl.files">
+		<tr ng-repeat="file in files">
 			<th>{{ file.name }}</th>
 			<th><a href="#/files/edit/{{$index}}" icon="edit"></a></th>
 			<th><span ng-click="fileCtrl.remove(file)" icon="remove"></span></th>

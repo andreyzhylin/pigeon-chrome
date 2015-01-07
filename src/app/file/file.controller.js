@@ -4,13 +4,13 @@ angular.module('pigeon.fileController', [
     'fileread',
 ])
 
-.controller('FileController', ['$routeParams', '$location', 'fileService',
-    function ($routeParams, $location, fileService) {
-        this.file = {};
-        this.files = fileService.getAll();
+.controller('FileController', ['$scope', '$routeParams', '$location', 'fileService',
+    function ($scope, $routeParams, $location, fileService) {
+        $scope.file = {};
+        $scope.files = fileService.getAll();
 
         if (angular.isDefined($routeParams.fileIndex)) {
-            this.file = angular.copy(fileService.get($routeParams.fileIndex));
+            $scope.file = angular.copy(fileService.get($routeParams.fileIndex));
         }
 
         this.editorOptions = {
@@ -22,9 +22,9 @@ angular.module('pigeon.fileController', [
 
         this.save = function () {
             if (angular.isDefined($routeParams.fileIndex)) {
-                fileService.edit(this.file, $routeParams.fileIndex);
+                fileService.edit($scope.file, $routeParams.fileIndex);
             } else {
-                fileService.add(this.file);
+                fileService.add($scope.file);
             }
             $location.path('/files');
         };

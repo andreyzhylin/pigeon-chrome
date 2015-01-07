@@ -1,25 +1,14 @@
 angular.module('pigeon.testController', [
     'pigeon.testService',
-    'pigeon.methods',
-    'shouldReturnValidator',
+
     'ui.codemirror'
 ])
 
-.controller('TestController', ['$routeParams', '$location', 'testService', 'methods',
-    function ($routeParams, $location, testService, methods) {
-        this.methods = [];
-        this.methods.push({name: 'METHOD_OPEN_TAB', value: methods.OPEN_TAB});
-        this.methods.push({name: 'METHOD_GET_REQUEST', value: methods.GET_REQUEST});
-        this.methods.push({name: 'METHOD_POST_REQUEST', value: methods.POST_REQUEST});
-
-        this.test = {};
-        this.test.method = methods.OPEN_TAB;
+.controller('TestController', ['$scope', '$routeParams', '$location', 'testService',
+    function ($scope, $routeParams, $location, testService) {
+        $scope.test = {};
         if (angular.isDefined($routeParams.testIndex)) {
-            this.test = angular.copy(testService.get($routeParams.pageIndex, $routeParams.testIndex));
-        }
-        if (angular.isUndefined(this.test.params)) {
-            this.test.params = [];
-            this.test.params.push({key: '', value: ''});
+            $scope.test = angular.copy(testService.get($routeParams.pageIndex, $routeParams.testIndex));
         }
 
         this.editorOptions = {
@@ -31,15 +20,11 @@ angular.module('pigeon.testController', [
 
         this.save = function () {
             if (angular.isDefined($routeParams.testIndex)) {
-                testService.edit(this.test, $routeParams.pageIndex, $routeParams.testIndex);
+                testService.edit($scope.test, $routeParams.pageIndex, $routeParams.testIndex);
             } else {
-                testService.add(this.test, $routeParams.pageIndex);
+                testService.add($scope.test, $routeParams.pageIndex);
             }
             $location.path('/');
-        };
-
-        this.isRequest = function () {
-            return this.test.method !== methods.OPEN_TAB;
         };
     }
 ])

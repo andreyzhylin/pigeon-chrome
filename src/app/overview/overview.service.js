@@ -4,13 +4,12 @@ angular.module('pigeon.overviewService', [
     'pigeon.fileService',
 
     'pigeon.statuses',
-    'pigeon.methods',
 
     'pascalprecht.translate',
 ])
 
-.factory('overviewService', ['$q', '$translate', 'chromeService', 'pageService', 'fileService', 'statuses', 'methods',
-    function ($q, $translate, chromeService, pageService, fileService, statuses, methods) {
+.factory('overviewService', ['$q', '$translate', 'chromeService', 'pageService', 'fileService', 'statuses',
+    function ($q, $translate, chromeService, pageService, fileService, statuses) {
         var _browserService = chromeService;
 
         /**
@@ -21,44 +20,17 @@ angular.module('pigeon.overviewService', [
          * @return {string} Prepared code
          */
         var _prepareCode = function (code) {
-            var filesCode = '';
-            angular.forEach(fileService.getAll(), function (file) {
-                filesCode += file.code + ' \n';
-            });
-            return filesCode +
-            '(function() { try {' +
-                code +
-            '} catch(e) {' +
-            'return {value: undefined, errorMessage: e.message};' +
-            '}})()';
-        };
-
-        /**
-         * @description
-         * Prepares result of test execution.
-         *
-         * @param  {object|string} result Result to prepare
-         * @return {object} Prepared result
-         */
-        var _prepareResult = function (result) {
-            return angular.isObject(result) ? result : {value: result, errorMessage: ''};
-        };
-
-        /**
-         * @description
-         * Returns status based on test execution result.
-         *
-         * @param  {*}      result Result of test execution
-         * @return {string} Test status
-         */
-        var _determineStatus = function (result) {
-            if (result === true) {
-                return statuses.SUCCESS;
-            } else if (result === false) {
-                return statuses.FAILED;
-            } else {
-                return statuses.ERROR;
-            }
+            // escape quotes
+            code = code.replace(/'/g, '\\\'');
+            // remove comments
+            code = code.replace(/(\/\*([\s\S]*?)\*\/)|(\/\/(.*)$)/gm, '');
+            // fix endlines
+            code = code.replace(/(\n(\r)?)/g, '\' + \n\'');
+            return 'try { ' +
+                'eval(\'' + code + '\'); ' +
+            '} catch(e) { ' +
+                'pigeon.reject(e.message); ' +
+            '}';
         };
 
         /**
@@ -73,22 +45,6 @@ angular.module('pigeon.overviewService', [
         };
 
         /**
-         * @description
-         * Performs operations after test execution.
-         *
-         * @param {object} test   Executed test
-         * @param {object} result Result of execution
-         */
-        var _completeExecution = function (test, result) {
-            test.isExecuting = false;
-            test.status = _determineStatus(result.value);
-            test.errorMessage = result.errorMessage;
-            if (test.status === statuses.ERROR && test.errorMessage === '') {
-                test.errorMessage = $translate.instant('ERROR_NOT_BOOLEAN', {value: '\'' + result.value + '\''});
-            }
-        };
-
-        /**
          * @param  {object}  page Page object
          * @return {Boolean} Returns whether all tests have been completed on the page
          */
@@ -100,19 +56,43 @@ angular.module('pigeon.overviewService', [
         };
 
         /**
-         * @param  {object}  page Page object
-         * @return {Boolean} Returns true if some tests should be executed on tab
+         * @description
+         * Opens page and executes specified tests on it
+         *
+         * @param  {object[]} tests Tests to execute
+         * @param  {object}   page  Page where tests should be executed
+         * @return {object} $q defer
          */
-        var _hasPageOnTabScripts = function (page) {
-            var hasPageOnTabScripts = page.tests.some(function (test) {
-                return test.method === methods.OPEN_TAB;
+        var _executeTests = function (tests, page) {
+            var deferred = $q.defer();
+
+            var filesCode = '';
+            angular.forEach(fileService.getAll(), function (file) {
+                filesCode += file.code + ' \n';
             });
-            return hasPageOnTabScripts;
+
+            _browserService.openPage(page.url, filesCode, page.isNewWindow).then(function (tabId) {
+                var scriptPromises = [];
+                angular.forEach(tests, function (test) {
+                    scriptPromises.push(_executeScript(tabId, test));
+                });
+                var isDebug = tests.some(function (test) {
+                    return test.isDebug;
+                });
+                $q.all(scriptPromises).then(function () {
+                    if (!isDebug) {
+                        _browserService.closePage(tabId);
+                    }
+                    deferred.resolve();
+                });
+
+            });
+            return deferred.promise;
         };
 
         /**
          * @description
-         * Executes one test on browser tab.
+         * Executes specified test on browser tab.
          *
          * @param  {number} tabId Browser tab id
          * @param  {object} test  Test to execute
@@ -120,87 +100,48 @@ angular.module('pigeon.overviewService', [
          */
         var _executeScript = function (tabId, test) {
             var deferred = $q.defer();
-            _browserService.executeScript(tabId, _prepareCode(test.code)).then(function (result) {
-                _completeExecution(test, _prepareResult(result[0]));
-                deferred.resolve(test);
-            });
-            return deferred.promise;
-        };
-
-        /**
-         * @description
-         * Executes one test that has GET request or POST request method.
-         *
-         * @param  {object} test Test to execute
-         * @return {object} $q promise
-         */
-        var _executeRequest = function (test) {
-            var deferred = $q.defer();
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = function () {
-                if (request.readyState == 4) {
-                    if (request.status == 200) {
-                        var response = JSON.stringify(request.responseText);
-                        var code = 'var response = ' + response + ';' + test.code;
-                        _browserService.executeRequest(_prepareCode(code)).then(function (result) {
-                            _completeExecution(test, _prepareResult(result));
-                            deferred.resolve(test);
-                        });
-                    } else {
-                        var errorMessage = request.status === 0 ? $translate.instant('ERROR_URL_NOT_FOUND') :
-                            $translate.instant('ERROR_REQUEST_STATUS',
-                                {status: request.status +' (' + request.statusText + ')'});
-                        _completeExecution(test, {value: undefined, errorMessage: errorMessage});
-                        deferred.resolve(test);
-                    }
-                }
-            };
-
-            var paramsStr = '';
-            if (angular.isDefined(test.params)) {
-                test.params.forEach(function (param) {
-                    paramsStr += param.key + '=' + encodeURIComponent(param.value) + '&';
+            _browserService.executeScript(tabId, _prepareCode(test.code), test.isDebug)
+                .then(function (testCases) {
+                    test.isExecuting = false;
+                    test.status = statuses.SUCCESS;
+                    test.errorMessage = '';
+                    angular.forEach(testCases, function (testCase) {
+                        if (testCase.value === false) {
+                            test.status = statuses.FAILED;
+                            test.errorMessage += testCase.message + '; ';
+                        } else if (testCase.value !== true) {
+                            test.status = statuses.ERROR;
+                            test.errorMessage = $translate.instant('ERROR_NOT_BOOLEAN',
+                                {value: '\'' + testCase.value + '\''}
+                            );
+                        }
+                    });
+                    deferred.resolve(test);
+                }, function (error) {
+                    test.isExecuting = false;
+                    test.status = statuses.ERROR;
+                    test.errorMessage = error.message;
+                    deferred.resolve(test);
                 });
-            }
-
-            if (test.method === methods.GET_REQUEST) {
-                request.open('GET', test.page.url + '?' + paramsStr, true);
-                request.send(null);
-            } else if (test.method === methods.POST_REQUEST) {
-                request.open('POST', test.page.url, true);
-                request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                request.send(paramsStr);
-            }
             return deferred.promise;
         };
 
-        var pigeon = {
+        var service = {
             /**
              * @description
-             * Inits and executes test (script or request)
+             * Inits and executes test
              *
              * @param  {object} test Test to execute
              * @return {object} $q promise
              */
             executeTest: function (test) {
-                var deferred = $q.defer();
                 if (test.isExecuting) {
-                    deferred.reject();
+                    return $q.defer().reject();
                 }
+
                 _initExecution(test);
-                if (test.method === methods.OPEN_TAB) {
-                    _browserService.openPage(test.page.url).then(function (tabId) {
-                        _executeScript(tabId, test).then(function (test) {
-                            _browserService.closePage(tabId);
-                            deferred.resolve(test);
-                        });
-                    });
-                } else {
-                    _executeRequest(test).then(function (test) {
-                        deferred.resolve(test);
-                    });
-                }
-                return deferred.promise.then(function () {
+
+                return _executeTests([test], test.page).then(function () {
                     pageService.save();
                     return true;
                 });
@@ -215,37 +156,19 @@ angular.module('pigeon.overviewService', [
              * @return {object}  $q promise
              */
             executePage: function (page, onlySuccess) {
-                var requestPromises = [];
-                var scriptPromises = [];
                 if (_isPageExecuting(page)) {
                     return $q.defer().reject();
                 }
+
+                var tests = [];
                 angular.forEach(page.tests, function (test) {
-                    if (test.method !== methods.OPEN_TAB &&
-                        (!onlySuccess || test.status !== statuses.SUCCESS)) {
+                    if (!onlySuccess || test.status !== statuses.SUCCESS) {
                         _initExecution(test);
-                        requestPromises.push(_executeRequest(test));
+                        tests.push(test);
                     }
                 });
-                var scriptsCompleted = $q.defer();
-                if (_hasPageOnTabScripts(page)) {
-                    _browserService.openPage(page.url).then(function (tabId) {
-                        angular.forEach(page.tests, function (test) {
-                            if (test.method === methods.OPEN_TAB &&
-                                (!onlySuccess || test.status !== statuses.SUCCESS)) {
-                                _initExecution(test);
-                                scriptPromises.push(_executeScript(tabId, test));
-                            }
-                        });
-                        $q.all(scriptPromises).then(function () {
-                            _browserService.closePage(tabId);
-                            scriptsCompleted.resolve();
-                        });
-                    });
-                } else {
-                    scriptsCompleted.resolve();
-                }
-                return $q.all(requestPromises.concat(scriptsCompleted.promise)).then(function () {
+
+                return _executeTests(tests, page).then(function () {
                     pageService.save();
                     return true;
                 });
@@ -262,15 +185,16 @@ angular.module('pigeon.overviewService', [
             executeAll: function (pages, onlySuccess) {
                 var promises = [];
                 angular.forEach(pages, function (page) {
-                    promises.push(pigeon.executePage(page, onlySuccess));
+                    promises.push(service.executePage(page, onlySuccess));
                 });
+
                 return $q.all(promises).then(function () {
                     pageService.save();
                     return true;
                 });
             }
         };
-        return pigeon;
+        return service;
     }
 ])
 

@@ -33,12 +33,9 @@ module.exports = function(config) {
         'src/common/services/chrome-api.mock.js',
         'src/common/services/util.js',
         'src/common/services/statuses.js',
-        'src/common/services/methods.js',
         'src/common/services/chrome.service.js',
 
         'src/app/app.js',
-
-        'src/app/sandbox/sandbox-frame.js',
 
         'src/app/overview/overview.service.js',
         'src/app/overview/overview.controller.js',
@@ -56,7 +53,6 @@ module.exports = function(config) {
         'src/common/directives/icon.js',
         'src/common/directives/fix-url.js',
         'src/common/directives/fileread.js',
-        'src/common/directives/should-return-validator.js',
         'src/common/directives/test-status/test-status.js',
 
         'src/**/*.spec.js'

@@ -6,23 +6,6 @@ angular.module('pigeon.testService', [
 ])
 
 .factory('testService', ['pageService', 'util', 'statuses', function (pageService, util, statuses) {
-    /**
-     * @description
-     * Filter empty test params
-     *
-     * @param  {array} params Test params
-     * @return {array} Filtered params
-     */
-    var _filterParams = function (params) {
-        var _params = [];
-        angular.forEach(params, function (param) {
-            if (param.key !== '' && param.value !== '') {
-                _params.push(param);
-            }
-        });
-        return _params;
-    };
-
     var storage = {
         /**
          * @description
@@ -69,7 +52,6 @@ angular.module('pigeon.testService', [
             if (!angular.isDefined(test.page.tests)) {
                 test.page.tests = [];
             }
-            test.params = _filterParams(test.params);
             test.page.tests.push(test);
             pageService.save();
         },
@@ -84,13 +66,12 @@ angular.module('pigeon.testService', [
          */
         edit: function (test, pageIndex, testIndex) {
             var oldTest = pageService.get(pageIndex).tests[testIndex];
-            if (oldTest.code !== test.code || oldTest.method !== test.method) {
+            if (oldTest.code !== test.code) {
                 oldTest.status = statuses.UNKNOWN;
             }
             oldTest.description = test.description;
             oldTest.code = test.code;
-            oldTest.method = test.method;
-            oldTest.params = _filterParams(test.params);
+            oldTest.isDebug = test.isDebug;
             pageService.save();
         },
 
