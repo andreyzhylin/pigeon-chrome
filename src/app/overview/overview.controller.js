@@ -7,7 +7,7 @@ angular.module('pigeon.overviewController', [
 
     'pigeon.testStatus',
     'ui.bootstrap',
-    'icon',
+    'icon'
 ])
 
 .controller('OverviewController', ['$scope', 'pageService', 'testService', 'overviewService', 'statuses',

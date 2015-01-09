@@ -31,6 +31,7 @@ module.exports = function(config) {
         'vendor/angular-ui-codemirror/ui-codemirror.min.js',
 
         'src/common/services/chrome-api.mock.js',
+        'src/common/services/templates.mock.js',
         'src/common/services/util.js',
         'src/common/services/statuses.js',
         'src/common/services/chrome.service.js',

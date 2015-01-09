@@ -2,6 +2,8 @@ angular.module('pigeon.testStatus', [
     'pigeon.statuses',
 
     'pascalprecht.translate',
+
+    'templates.common'
 ])
 
 .directive('testStatus', ['$translate', 'statuses', function ($translate, statuses) {

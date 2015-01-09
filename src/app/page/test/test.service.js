@@ -85,7 +85,7 @@ angular.module('pigeon.testService', [
             var pageIndex = pageService.getAll().indexOf(test.page);
             util.arrayRemove(pageService.get(pageIndex).tests, test);
             pageService.save();
-        },
+        }
     };
     return storage;
 }])

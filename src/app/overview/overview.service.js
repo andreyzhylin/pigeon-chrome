@@ -5,7 +5,7 @@ angular.module('pigeon.overviewService', [
 
     'pigeon.statuses',
 
-    'pascalprecht.translate',
+    'pascalprecht.translate'
 ])
 
 .factory('overviewService', ['$q', '$translate', 'chromeService', 'pageService', 'fileService', 'statuses',

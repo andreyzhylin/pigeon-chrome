@@ -1,7 +1,7 @@
 angular.module('pigeon.fileService', [
     'pigeon.chromeService',
 
-    'pigeon.util',
+    'pigeon.util'
 ])
 
 .factory('fileService', ['$q', 'chromeService', 'util', function ($q, chromeService, util) {
@@ -27,8 +27,7 @@ angular.module('pigeon.fileService', [
      * @return {array}  Files
      */
     var _prepare = function (data) {
-        var files = JSON.parse(data[STORAGE_FILES_KEY]);
-        return angular.isDefined(files) ? files : [];
+        return angular.isDefined(data[STORAGE_FILES_KEY]) ? JSON.parse(data[STORAGE_FILES_KEY]) : [];
     };
 
     var storage = {

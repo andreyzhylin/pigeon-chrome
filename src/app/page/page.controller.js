@@ -1,7 +1,7 @@
 angular.module('pigeon.pageController', [
     'pigeon.pageService',
 
-    'fixUrl',
+    'fixUrl'
 ])
 
 .controller('PageController', ['$scope', '$routeParams', '$location', 'pageService',

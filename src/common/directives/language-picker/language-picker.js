@@ -1,5 +1,7 @@
 angular.module('languagePicker', [
     'pascalprecht.translate',
+
+    'templates.common'
 ])
 
 .directive('languagePicker', ['$translate', function ($translate) {

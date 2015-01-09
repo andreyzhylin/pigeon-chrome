@@ -1,0 +1,54 @@
+{
+  "name": "pigeon-chrome",
+  "version": "1.1.1",
+  "description": "Tool to test javascript code in the context of specified pages",
+  "main": "src/app/app.js",
+  "dependencies": {
+    "grunt": "^0.4.5",
+    "coffeelint": "^1.7.0",
+    "grunt-bump": "^0.0.6",
+    "grunt-coffeelint": "^0.0.13",
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-clean": "^0.4.1",
+    "grunt-contrib-coffee": "^0.7.0",
+    "grunt-contrib-jshint": "^0.4.3",
+    "grunt-contrib-copy": "^0.4.1",
+    "grunt-contrib-less": "^0.11.4",
+    "grunt-contrib-uglify": "^0.2.7",
+    "grunt-contrib-watch": "^0.4.4",
+    "grunt-html2js": "^0.1.9",
+    "grunt-karma": "^0.8.3",
+    "karma-coverage": "^0.2.7",
+    "karma-firefox-launcher": "^0.1.3",
+    "grunt-conventional-changelog": "^0.1.2",
+    "karma": "^0.12.28",
+    "grunt-ng-annotate": "^0.8.0",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-coffee-preprocessor": "^0.2.1",
+    "karma-jasmine": "^0.2.2",
+    "karma-jasmine-ajax": "^0.1.4"
+  },
+  "devDependencies": {
+    "grunt-injector": "^0.6.0",
+    "grunt-jscs": "^1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andreyzhylin/pigeon-chrome.git"
+  },
+  "keywords": [
+    "javascript",
+    "test",
+    "chrome",
+    "angular"
+  ],
+  "author": "Andrey Zhylin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreyzhylin/pigeon-chrome/issues"
+  },
+  "homepage": "https://github.com/andreyzhylin/pigeon-chrome"
+}

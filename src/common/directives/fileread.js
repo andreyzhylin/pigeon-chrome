@@ -1,12 +1,12 @@
 angular.module('fileread', [])
 
-.directive("fileread", function () {
+.directive('fileread', function () {
     return {
         scope: {
-            fileread: "="
+            fileread: '='
         },
         link: function (scope, element, attributes) {
-            element.bind("change", function (changeEvent) {
+            element.bind('change', function (changeEvent) {
                 scope.fileread.name = changeEvent.target.files[0].name;
                 var reader = new FileReader();
                 reader.onload = function (loadEvent) {

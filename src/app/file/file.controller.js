@@ -1,7 +1,7 @@
 angular.module('pigeon.fileController', [
     'pigeon.fileService',
 
-    'fileread',
+    'fileread'
 ])
 
 .controller('FileController', ['$scope', '$routeParams', '$location', 'fileService',

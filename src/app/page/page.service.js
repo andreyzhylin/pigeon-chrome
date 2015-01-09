@@ -31,6 +31,9 @@ angular.module('pigeon.pageService', [
      * @return {array} Pages
      */
     var _prepare = function (data) {
+        if (angular.isUndefined(data[STORAGE_PAGES_KEY])) {
+            return [];
+        }
         var pages = JSON.parse(data[STORAGE_PAGES_KEY]);
         angular.forEach(pages, function (page) {
             angular.forEach(page.tests, function (test) {
@@ -38,7 +41,7 @@ angular.module('pigeon.pageService', [
                 test.isExecuting = false;
             });
         });
-        return angular.isDefined(pages) ? pages : [];
+        return pages;
     };
 
     var storage = {

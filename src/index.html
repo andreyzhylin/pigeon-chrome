@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html ng-csp>
 <head>
-	<title>Tool for chrome extension testing</title>
+	<title>Pigeon</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
 
-	<link href="assets/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
+	<!-- injector:css -->
 	<link rel="stylesheet" href="/vendor/angular/angular-csp.css">
 	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/vendor/codemirror/lib/codemirror.css">
 	<link rel="stylesheet" href="/vendor/codemirror/theme/elegant.css">
 	<link rel="stylesheet" href="assets/css/main.css">
+  	<!-- endinjector -->
 </head>
 <body>
 	<nav class="navbar navbar-inverse" role="navigation">
@@ -32,6 +34,7 @@
 		<div ng-view></div>
 	</div>
 
+	<!-- injector:js -->
 	<script type="text/javascript" src="/vendor/angular/angular.min.js"></script>
 	<script type="text/javascript" src="/vendor/angular-route/angular-route.min.js"></script>
 	<script type="text/javascript" src="/vendor/angular-messages/angular-messages.min.js"></script>
@@ -50,6 +53,7 @@
 	<script type="text/javascript" src="common/services/util.js"></script>
 	<script type="text/javascript" src="common/services/statuses.js"></script>
 	<script type="text/javascript" src="common/services/chrome.service.js"></script>
+	<script type="text/javascript" src="common/services/templates.mock.js"></script>
 
 	<script type="text/javascript" src="app/app.js"></script>
 
@@ -70,5 +74,6 @@
 	<script type="text/javascript" src="common/directives/fix-url.js"></script>
 	<script type="text/javascript" src="common/directives/fileread.js"></script>
 	<script type="text/javascript" src="common/directives/test-status/test-status.js"></script>
+	<!-- endinjector -->
 </body>
 </html>

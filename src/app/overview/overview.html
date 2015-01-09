@@ -1,58 +1,58 @@
 <div class="pull-left">
-	<a href="#/pages/add" class="btn btn-default"><span icon="plus"></span> {{'ADD_PAGE' | translate}}</a>
+    <a href="#/pages/add" class="btn btn-default"><span icon="plus"></span> {{'ADD_PAGE' | translate}}</a>
 </div>
 <div class="pull-right">
-	<div class="checkbox">
-		<label>
-			<input ng-model="overviewCtrl.shouldHideSuccess" type="checkbox"> {{'HIDE_SUCCESS_TESTS' | translate}}
-		</label>
-	</div>
+    <div class="checkbox">
+        <label>
+            <input ng-model="overviewCtrl.shouldHideSuccess" type="checkbox"> {{'HIDE_SUCCESS_TESTS' | translate}}
+        </label>
+    </div>
 </div>
 <table class="table">
-	<thead>
-	<tr>
-		<th class="col-md-6">{{'TABLE_HEADER_DESCRIPTION' | translate}}</th>
-		<th class="col-md-1">{{'TABLE_HEADER_STATUS' | translate}}</th>
-		<th class="col-md-1">
-			<span ng-click="overviewCtrl.refreshAll()" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_ALL_TESTS' | translate}}"></span>
-			<span ng-click="overviewCtrl.refreshAll(true)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_ALL_UNSUCCESS_TESTS' | translate}}" class="status-failed"></span>
-		</th>
-		<th class="col-md-1">{{'TABLE_HEADER_EDIT' | translate}}</th>
-		<th class="col-md-1">{{'TABLE_HEADER_REMOVE' | translate}}</th>
-		<th class="col-md-1">{{'TABLE_HEADER_ADD_TEST' | translate}}</th>
-		<th class="col-md-1">{{'TABLE_HEADER_LINK' | translate}}</th>
-	</tr>
-	</thead>
-	<tbody ng-repeat="page in pages">
-		<tr class="info">
-			<th>{{ page.description }}</th>
-			<th>
-				<span class="status-success">{{ overviewCtrl.countTests(page, statuses.SUCCESS) || 0 }}</span>
-				<span class="divider"> / </span>
-				<span class="status-failed">{{ overviewCtrl.countTests(page, statuses.FAILED) + overviewCtrl.countTests(page, statuses.ERROR) || 0 }}</span>
-				<span class="divider"> / </span>
-				<span class="status-unknown">{{ overviewCtrl.countTests(page, statuses.UNKNOWN) || 0 }}</span>
-			</th>
-			<th>
-				<span ng-click="overviewCtrl.refreshPage(page)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_PAGE_TESTS' | translate}}"></span>
-				<span ng-click="overviewCtrl.refreshPage(page, true)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_PAGE_UNSUCCESS_TESTS' | translate}}" class="status-failed"></span>
-			</th>
-			<th><a href="#/pages/edit/{{$index}}" icon="edit"></a></th>
-			<th><span ng-click="overviewCtrl.removePage(page)" icon="remove"></span></th>
-			<th><a href="#/pages/{{$index}}/tests/add" icon="plus"></a></th>
-			<th><a href="{{ page.url }}" target="_blank" icon="new-window" tooltip="{{ page.url }}"></a></th>
-		</tr>
-		<tr ng-repeat="test in page.tests" ng-hide="overviewCtrl.shouldHideTest(test)">
-			<td>{{ test.description }}</td>
-			<td>
-				<test-status></test-status>
-				<img ng-show="test.isExecuting" src="assets/img/loader.gif" class="loader">
-			</td>
-			<td><span ng-click="overviewCtrl.refreshTest(test)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_TEST' | translate}}"></span></td>
-			<td><a href="#/pages/{{ $parent.$index }}/tests/edit/{{ $index }}" icon="edit"></a></td>
-			<td><span ng-click="overviewCtrl.removeTest(test)"  icon="remove"></span></td>
-			<td></td>
-			<td></td>
-		</tr>
-	</tbody>
+    <thead>
+    <tr>
+        <th class="col-md-6">{{'TABLE_HEADER_DESCRIPTION' | translate}}</th>
+        <th class="col-md-1">{{'TABLE_HEADER_STATUS' | translate}}</th>
+        <th class="col-md-1">
+            <span ng-click="overviewCtrl.refreshAll()" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_ALL_TESTS' | translate}}"></span>
+            <span ng-click="overviewCtrl.refreshAll(true)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_ALL_UNSUCCESS_TESTS' | translate}}" class="status-failed"></span>
+        </th>
+        <th class="col-md-1">{{'TABLE_HEADER_EDIT' | translate}}</th>
+        <th class="col-md-1">{{'TABLE_HEADER_REMOVE' | translate}}</th>
+        <th class="col-md-1">{{'TABLE_HEADER_ADD_TEST' | translate}}</th>
+        <th class="col-md-1">{{'TABLE_HEADER_LINK' | translate}}</th>
+    </tr>
+    </thead>
+    <tbody ng-repeat="page in pages">
+        <tr class="info">
+            <th>{{ page.description }}</th>
+            <th>
+                <span class="status-success">{{ overviewCtrl.countTests(page, statuses.SUCCESS) || 0 }}</span>
+                <span class="divider"> / </span>
+                <span class="status-failed">{{ overviewCtrl.countTests(page, statuses.FAILED) + overviewCtrl.countTests(page, statuses.ERROR) || 0 }}</span>
+                <span class="divider"> / </span>
+                <span class="status-unknown">{{ overviewCtrl.countTests(page, statuses.UNKNOWN) || 0 }}</span>
+            </th>
+            <th>
+                <span ng-click="overviewCtrl.refreshPage(page)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_PAGE_TESTS' | translate}}"></span>
+                <span ng-click="overviewCtrl.refreshPage(page, true)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_PAGE_UNSUCCESS_TESTS' | translate}}" class="status-failed"></span>
+            </th>
+            <th><a href="#/pages/edit/{{$index}}" icon="edit"></a></th>
+            <th><span ng-click="overviewCtrl.removePage(page)" icon="remove"></span></th>
+            <th><a href="#/pages/{{$index}}/tests/add" icon="plus"></a></th>
+            <th><a href="{{ page.url }}" target="_blank" icon="new-window" tooltip="{{ page.url }}"></a></th>
+        </tr>
+        <tr ng-repeat="test in page.tests" ng-hide="overviewCtrl.shouldHideTest(test)">
+            <td>{{ test.description }}</td>
+            <td>
+                <test-status></test-status>
+                <img ng-show="test.isExecuting" src="assets/img/loader.gif" class="loader">
+            </td>
+            <td><span ng-click="overviewCtrl.refreshTest(test)" icon="refresh" tooltip="{{'TOOLTIP_REFRESH_TEST' | translate}}"></span></td>
+            <td><a href="#/pages/{{ $parent.$index }}/tests/edit/{{ $index }}" icon="edit"></a></td>
+            <td><span ng-click="overviewCtrl.removeTest(test)"  icon="remove"></span></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
 </table>

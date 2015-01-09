@@ -73,18 +73,21 @@ angular.module('pigeon.chromeService', [])
     // Listen to messages from executing scripts with test case results
     chrome.runtime.onMessage.addListener(function (request) {
         switch (request.type) {
-            case Messenger.messageType.TEST_CASE:
-                _scripts[request.tabId][request.scriptIndex].testCases.push(
-                    {value: request.value, message: request.message}
-                );
-                break;
-            case Messenger.messageType.ERROR:
-                _scripts[request.tabId][request.scriptIndex].deferred.reject({message: request.message});
-                break;
-            case Messenger.messageType.RESOLVE:
-                var testCases = _scripts[request.tabId][request.scriptIndex].testCases;
-                _scripts[request.tabId][request.scriptIndex].deferred.resolve(testCases);
-                break;
+        case Messenger.messageType.TEST_CASE:
+            _scripts[request.tabId][request.scriptIndex].testCases.push(
+                {value: request.value, message: request.message}
+            );
+            break;
+        case Messenger.messageType.ERROR:
+            _scripts[request.tabId][request.scriptIndex].deferred.reject({message: request.message});
+            break;
+        case Messenger.messageType.RESOLVE:
+            // FIXME: sometimes array element undefined
+            var testCases = _scripts[request.tabId][request.scriptIndex].testCases;
+            _scripts[request.tabId][request.scriptIndex].deferred.resolve(testCases);
+            break;
+        default:
+            break;
         }
     });
 

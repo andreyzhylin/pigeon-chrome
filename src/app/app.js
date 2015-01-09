@@ -14,6 +14,8 @@ angular.module('pigeon.app', [
     'pigeon.fileController',
 
     'languagePicker',
+
+    'templates.app'
 ])
 
 .config(['$routeProvider',
