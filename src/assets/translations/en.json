@@ -2,6 +2,7 @@
     "APP_NAME" : "Pigeon",
     "MENU_OVERVIEW" : "Overview",
     "MENU_FILES" : "Files",
+    "MENU_SETTINGS" : "Settings",
 
     "LANGUAGE_EN" : "EN",
     "LANGUAGE_RU" : "RU",
@@ -28,6 +29,10 @@
     "FILE_CODE" : "File code",
     "FILE_NAME_REQUIRED_MESSAGE" : "You did not enter file name",
     "FILE_CODE_REQUIRED_MESSAGE" : "You did not enter file code",
+
+    "SETTINGS_EXECUTION_TIMEOUT" : " Tests timeout (ms)",
+    "SETTINGS_EXECUTION_TIMEOUT_REQUIRED_MESSAGE" : "You did not enter execution timeout",
+    "SETTINGS_EXECUTION_TIMEOUT_NUMBER_MESSAGE" : "Not a valud execution timeout",
 
     "METHOD_OPEN_TAB" : "Open tab",
     "METHOD_GET_REQUEST" : "GET request",

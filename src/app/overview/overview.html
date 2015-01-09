@@ -4,7 +4,7 @@
 <div class="pull-right">
     <div class="checkbox">
         <label>
-            <input ng-model="overviewCtrl.shouldHideSuccess" type="checkbox"> {{'HIDE_SUCCESS_TESTS' | translate}}
+            <input ng-model="overviewCtrl.shouldHideSuccess" ng-change="overviewCtrl.saveHideSuccess()" type="checkbox"> {{'HIDE_SUCCESS_TESTS' | translate}}
         </label>
     </div>
 </div>

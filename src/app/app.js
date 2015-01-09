@@ -7,11 +7,13 @@ angular.module('pigeon.app', [
     'pigeon.pageService',
     'pigeon.testService',
     'pigeon.fileService',
+    'pigeon.settingsService',
 
     'pigeon.testController',
     'pigeon.pageController',
     'pigeon.overviewController',
     'pigeon.fileController',
+    'pigeon.settingsController',
 
     'languagePicker',
 
@@ -26,7 +28,7 @@ angular.module('pigeon.app', [
             controller: 'OverviewController',
             controllerAs: 'overviewCtrl',
             resolve: {
-                data: function ($q, pageService, fileService) {
+                data: function ($q, pageService, fileService, settingsService) {
                     return $q.all([].concat(pageService.init(), fileService.init()));
                 }
             }
@@ -36,8 +38,8 @@ angular.module('pigeon.app', [
             controller: 'PageController',
             controllerAs: 'pageCtrl',
             resolve: {
-                data: function (pageService) {
-                    return pageService.init();
+                data: function ($q, pageService, settingsService) {
+                    return $q.all([].concat(pageService.init(), settingsService.init()));
                 }
             }
         })
@@ -46,8 +48,8 @@ angular.module('pigeon.app', [
             controller: 'PageController',
             controllerAs: 'pageCtrl',
             resolve: {
-                data: function (pageService) {
-                    return pageService.init();
+                data: function ($q, pageService, settingsService) {
+                    return $q.all([].concat(pageService.init(), settingsService.init()));
                 }
             }
         })
@@ -56,8 +58,8 @@ angular.module('pigeon.app', [
             controller: 'TestController',
             controllerAs: 'testCtrl',
             resolve: {
-                data: function (testService) {
-                    return testService.init();
+                data: function ($q, testService, settingsService) {
+                    return $q.all([].concat(testService.init(), settingsService.init()));
                 }
             }
         })
@@ -66,8 +68,8 @@ angular.module('pigeon.app', [
             controller: 'TestController',
             controllerAs: 'testCtrl',
             resolve: {
-                data: function (testService) {
-                    return testService.init();
+                data: function ($q, testService, settingsService) {
+                    return $q.all([].concat(testService.init(), settingsService.init()));
                 }
             }
         })
@@ -76,8 +78,8 @@ angular.module('pigeon.app', [
             controller: 'FileController',
             controllerAs: 'fileCtrl',
             resolve: {
-                data: function (fileService) {
-                    return fileService.init();
+                data: function ($q, fileService, settingsService) {
+                    return $q.all([].concat(fileService.init(), settingsService.init()));
                 }
             }
         })
@@ -86,8 +88,8 @@ angular.module('pigeon.app', [
             controller: 'FileController',
             controllerAs: 'fileCtrl',
             resolve: {
-                data: function (fileService) {
-                    return fileService.init();
+                data: function ($q, fileService, settingsService) {
+                    return $q.all([].concat(fileService.init(), settingsService.init()));
                 }
             }
         })
@@ -96,8 +98,18 @@ angular.module('pigeon.app', [
             controller: 'FileController',
             controllerAs: 'fileCtrl',
             resolve: {
-                data: function (fileService) {
-                    return fileService.init();
+                data: function ($q, fileService, settingsService) {
+                    return $q.all([].concat(fileService.init(), settingsService.init()));
+                }
+            }
+        })
+        .when('/settings', {
+            templateUrl: 'app/settings/settings-form.html',
+            controller: 'SettingsController',
+            controllerAs: 'settingsCtrl',
+            resolve: {
+                data: function (settingsService) {
+                    return settingsService.init();
                 }
             }
         })

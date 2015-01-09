@@ -3,8 +3,6 @@ angular.module('pigeon.chromeService', [])
 .factory('chromeService', ['$q', function ($q) {
     var _scripts = [];
 
-    var SCRIPT_EXECUTION_TIMEOUT = 10000;
-
     // Messenger will be injected before tests execution
     // Messenger functions are used in tests code
     function Messenger(_extensionId) {
@@ -175,10 +173,11 @@ angular.module('pigeon.chromeService', [])
          *
          * @param  {string}  tabId   Id of tab where should execute script
          * @param  {string}  code    Code to execute
+         * @param  {number}  timeout After timeout (ms) should interrupt execution (if not debug)
          * @param  {Boolean} isDebug `true` if test should be execute in debug mode (without timeout)
          * @return {object}  $q promise (resolved in onMessage listener)
          */
-        executeScript: function (tabId, code, isDebug) {
+        executeScript: function (tabId, code, timeout, isDebug) {
             var deferred = $q.defer();
 
             var scriptIndex = _scripts[tabId].push({deferred: deferred, testCases: []}) - 1;
@@ -187,7 +186,7 @@ angular.module('pigeon.chromeService', [])
                 if (!isDebug) {
                     setTimeout(function () {
                         deferred.reject({message: 'TIMEOUT'});
-                    }, SCRIPT_EXECUTION_TIMEOUT);
+                    }, timeout);
                 }
             });
 

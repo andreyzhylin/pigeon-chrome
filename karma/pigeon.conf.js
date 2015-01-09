@@ -50,6 +50,9 @@ module.exports = function(config) {
         'src/app/file/file.service.js',
         'src/app/file/file.controller.js',
 
+        'src/app/settings/settings.service.js',
+        'src/app/settings/settings.controller.js',
+
         'src/common/directives/language-picker/language-picker.js',
         'src/common/directives/icon.js',
         'src/common/directives/fix-url.js',

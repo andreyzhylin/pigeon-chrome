@@ -2,6 +2,7 @@ angular.module('pigeon.overviewController', [
     'pigeon.pageService',
     'pigeon.testService',
     'pigeon.overviewService',
+    'pigeon.settingsService',
 
     'pigeon.statuses',
 
@@ -10,9 +11,10 @@ angular.module('pigeon.overviewController', [
     'icon'
 ])
 
-.controller('OverviewController', ['$scope', 'pageService', 'testService', 'overviewService', 'statuses',
-    function ($scope, pageService, testService, overviewService, statuses) {
-        this.shouldHideSuccess = false;
+.controller('OverviewController', [
+    '$scope', 'pageService', 'testService', 'overviewService', 'settingsService', 'statuses',
+    function ($scope, pageService, testService, overviewService, settingsService, statuses) {
+        this.shouldHideSuccess = settingsService.getHideSuccess();
 
         $scope.pages = pageService.getAll();
         $scope.statuses = statuses;
@@ -29,6 +31,10 @@ angular.module('pigeon.overviewController', [
 
         this.shouldHideTest = function (test) {
             return (test.status === statuses.SUCCESS) && this.shouldHideSuccess;
+        };
+
+        this.saveHideSuccess = function () {
+            settingsService.setHideSuccess(this.shouldHideSuccess);
         };
 
         this.removeTest = function (test) {

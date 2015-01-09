@@ -2,14 +2,16 @@ angular.module('pigeon.overviewService', [
     'pigeon.chromeService',
     'pigeon.pageService',
     'pigeon.fileService',
+    'pigeon.settingsService',
 
     'pigeon.statuses',
 
     'pascalprecht.translate'
 ])
 
-.factory('overviewService', ['$q', '$translate', 'chromeService', 'pageService', 'fileService', 'statuses',
-    function ($q, $translate, chromeService, pageService, fileService, statuses) {
+.factory('overviewService', [
+    '$q', '$translate', 'chromeService', 'pageService', 'fileService', 'settingsService', 'statuses',
+    function ($q, $translate, chromeService, pageService, fileService, settingsService, statuses) {
         var _browserService = chromeService;
 
         /**
@@ -100,7 +102,9 @@ angular.module('pigeon.overviewService', [
          */
         var _executeScript = function (tabId, test) {
             var deferred = $q.defer();
-            _browserService.executeScript(tabId, _prepareCode(test.code), test.isDebug)
+
+            var timeout = settingsService.getExecutionTimeout();
+            _browserService.executeScript(tabId, _prepareCode(test.code), timeout, test.isDebug)
                 .then(function (testCases) {
                     test.isExecuting = false;
                     test.status = statuses.SUCCESS;
@@ -123,6 +127,7 @@ angular.module('pigeon.overviewService', [
                     test.errorMessage = error.message;
                     deferred.resolve(test);
                 });
+
             return deferred.promise;
         };
 

@@ -2,6 +2,7 @@
     "APP_NAME" : "Pigeon",
     "MENU_OVERVIEW" : "Обзор тестов",
     "MENU_FILES" : "Файлы",
+    "MENU_SETTINGS" : "Настройки",
 
     "LANGUAGE_EN" : "EN",
     "LANGUAGE_RU" : "RU",
@@ -28,6 +29,10 @@
     "FILE_CODE" : "Код файла",
     "FILE_NAME_REQUIRED_MESSAGE" : "Вы не ввели название файла",
     "FILE_CODE_REQUIRED_MESSAGE" : "Вы не ввели код файла",
+
+    "SETTINGS_EXECUTION_TIMEOUT" : "Таймаут выполнения тестов (мс)",
+    "SETTINGS_EXECUTION_TIMEOUT_REQUIRED_MESSAGE" : "Вы не ввели таймаут выполнения тестов",
+    "SETTINGS_EXECUTION_TIMEOUT_NUMBER_MESSAGE" : "Некорректный таймаут",
 
     "METHOD_OPEN_TAB" : "Открытие вкладки",
     "METHOD_GET_REQUEST" : "GET запрос",
