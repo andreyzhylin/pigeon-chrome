@@ -13,13 +13,23 @@ angular.module('pigeon.pageService', [
 
     /**
      * @description
-     * Saves pages to browser storage.
+     * Returns pages json prepared to save or export
+     *
+     * @return {[type]} [description]
      */
-    var _saveData = function () {
-        var data = JSON.stringify(_pages, function (key, value) {
+    var _getJson = function () {
+        return JSON.stringify(_pages, function (key, value) {
             // pages array has circular structure, we should remove links to pages
             return key === 'page' ? undefined : value;
         });
+    };
+
+    /**
+     * @description
+     * Saves pages to browser storage.
+     */
+    var _saveData = function () {
+        var data = _getJson();
         _browserService.saveData(STORAGE_PAGES_KEY, data);
     };
 
@@ -130,6 +140,31 @@ angular.module('pigeon.pageService', [
          * Refreshes browser storage.
          */
         save: function () {
+            _saveData();
+        },
+
+        /**
+         * @description
+         * Returns pages in json format
+         *
+         * @return {json} Pages
+         */
+        export: function () {
+            var data = _getJson();
+            return data;
+        },
+
+        /**
+         * @description
+         * Imports pages from specified json
+         *
+         * @param {json} json Pages json
+         */
+        import: function (json) {
+            // TODO: Add validation
+            var data = {};
+            data[STORAGE_PAGES_KEY] = json;
+            _pages = _prepare(data);
             _saveData();
         }
     };

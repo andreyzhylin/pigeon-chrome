@@ -33,6 +33,8 @@
     "SETTINGS_EXECUTION_TIMEOUT" : " Tests timeout (ms)",
     "SETTINGS_EXECUTION_TIMEOUT_REQUIRED_MESSAGE" : "You did not enter execution timeout",
     "SETTINGS_EXECUTION_TIMEOUT_NUMBER_MESSAGE" : "Not a valud execution timeout",
+    "SETTINGS_EXPORT_TESTS" : "Export tests",
+    "SETTINGS_IMPORT_TESTS" : "Import tests",
 
     "METHOD_OPEN_TAB" : "Open tab",
     "METHOD_GET_REQUEST" : "GET request",

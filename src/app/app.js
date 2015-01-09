@@ -108,8 +108,8 @@ angular.module('pigeon.app', [
             controller: 'SettingsController',
             controllerAs: 'settingsCtrl',
             resolve: {
-                data: function (settingsService) {
-                    return settingsService.init();
+                data: function ($q, settingsService, pageService) {
+                    return $q.all([].concat(settingsService.init(), pageService.init()));
                 }
             }
         })
@@ -120,7 +120,7 @@ angular.module('pigeon.app', [
 
 .config(['$compileProvider',
     function ($compileProvider) {
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|blob):/);
     }
 ])
 

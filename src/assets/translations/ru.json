@@ -33,6 +33,8 @@
     "SETTINGS_EXECUTION_TIMEOUT" : "Таймаут выполнения тестов (мс)",
     "SETTINGS_EXECUTION_TIMEOUT_REQUIRED_MESSAGE" : "Вы не ввели таймаут выполнения тестов",
     "SETTINGS_EXECUTION_TIMEOUT_NUMBER_MESSAGE" : "Некорректный таймаут",
+    "SETTINGS_EXPORT_TESTS" : "Экспорт тестов",
+    "SETTINGS_IMPORT_TESTS" : "Импорт тестов",
 
     "METHOD_OPEN_TAB" : "Открытие вкладки",
     "METHOD_GET_REQUEST" : "GET запрос",
