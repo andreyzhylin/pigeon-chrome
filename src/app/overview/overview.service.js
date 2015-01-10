@@ -74,14 +74,21 @@ angular.module('pigeon.overviewService', [
             });
 
             _browserService.openPage(page.url, filesCode, page.isNewWindow).then(function (tabId) {
-                var scriptPromises = [];
+                var execution = $q.defer();
+                var executionPromise = execution.promise;
                 angular.forEach(tests, function (test) {
-                    scriptPromises.push(_executeScript(tabId, test));
+                    executionPromise = executionPromise.then(function () {
+                        return _executeScript(tabId, test).then(function () {
+                            return true;
+                        });
+                    });
                 });
+                execution.resolve();
+
                 var isDebug = tests.some(function (test) {
                     return test.isDebug;
                 });
-                $q.all(scriptPromises).then(function () {
+                executionPromise.then(function () {
                     if (!isDebug) {
                         _browserService.closePage(tabId);
                     }

@@ -23,6 +23,7 @@ angular.module('pigeon.chromeService', [])
          * @param {Boolean} testCase    Testing value
          */
         this.expect = function (tabId, scriptIndex, message, testCase) {
+            console.log('Pigeon expected: ' + message + ' - ' + testCase);
             chrome.runtime.sendMessage(this.extensionId, {
                 tabId: tabId,
                 scriptIndex: scriptIndex,
@@ -40,6 +41,7 @@ angular.module('pigeon.chromeService', [])
          * @param {number} scriptIndex Index of executing script (added automatically by browser service)
          */
         this.resolve = function (tabId, scriptIndex) {
+            console.log('Pigeon resolved.');
             chrome.runtime.sendMessage(this.extensionId, {
                 tabId: tabId,
                 scriptIndex: scriptIndex,
@@ -56,6 +58,7 @@ angular.module('pigeon.chromeService', [])
          * @param {string} message     Error message
          */
         this.reject = function (tabId, scriptIndex, message) {
+            console.log('Pigeon rejected: ' + message);
             chrome.runtime.sendMessage(this.extensionId, {
                 tabId: tabId,
                 scriptIndex: scriptIndex,
