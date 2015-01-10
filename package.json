@@ -29,6 +29,7 @@
     "karma-jasmine-ajax": "^0.1.4"
   },
   "devDependencies": {
+    "grunt-crx": "^0.3.4",
     "grunt-injector": "^0.6.0",
     "grunt-jscs": "^1.1.0"
   },

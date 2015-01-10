@@ -11,10 +11,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-injector');
     grunt.loadNpmTasks("grunt-jscs");
+    grunt.loadNpmTasks('grunt-crx');
 
     grunt.registerTask('default', ['jshint', 'jscs', 'build', 'karma:watch']);
     grunt.registerTask('build', ['clean', 'html2js', 'concat', 'copy', 'injector', 'updateManifest']);
-    grunt.registerTask('release', ['jshint', 'jscs', 'karma:continuous', 'build', 'ngAnnotate', 'uglify']);
+    grunt.registerTask('release', ['jshint', 'jscs', 'karma:continuous', 'build', 'ngAnnotate', 'uglify', 'crx']);
 
     grunt.registerTask('updateManifest', function () {
         var manifestFile = grunt.config('build_dir') + '/manifest.json';
@@ -23,7 +24,10 @@ module.exports = function (grunt) {
             return true;
         }
         var manifest = grunt.file.readJSON(manifestFile);
-        manifest.options_page = 'index.html';
+        manifest.options_page = manifest.options_page.replace('src/', '');
+        for (var size in manifest.icons) {
+            manifest.icons[size] = manifest.icons[size].replace('src/', '');
+        }
         grunt.file.write(manifestFile, JSON.stringify(manifest, null, 2));
     });
 
@@ -36,10 +40,12 @@ module.exports = function (grunt) {
     grunt.initConfig({
         /*
             build_dir - for current build
+            bin_dur - for package
             build_dir/lib_dir - for vendor js files
             build_dir/assets_dir - for vendor and project assets
          */
         build_dir: 'build',
+        bin_dir: 'bin',
         lib_dir: 'lib',
         assets_dir: 'assets',
 
@@ -216,6 +222,13 @@ module.exports = function (grunt) {
                         '<%= build_dir %>/<%= assets_dir %>/css/*.css',
                         '<%= build_dir %>/<%= assets_dir %>/css/theme/*.css'],
                 }
+            }
+        },
+
+        crx: {
+            package: {
+                "src": "<%= build_dir %>",
+                "dest": "<%= bin_dir %>",
             }
         }
     });

@@ -9,5 +9,10 @@
     "storage",
     "notifications"
   ],
-  "options_page": "src/index.html"
+  "options_page": "src/index.html",
+  "icons": {
+    "16": "src/assets/img/pigeon16.png",
+    "48": "src/assets/img/pigeon48.png",
+    "128": "src/assets/img/pigeon128.png"
+  }
 }
