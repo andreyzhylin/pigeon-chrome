@@ -3,6 +3,12 @@
     "MENU_OVERVIEW" : "Overview",
     "MENU_FILES" : "Files",
     "MENU_SETTINGS" : "Settings",
+    "MENU_GUIDE" : "Guide",
+
+    "ALERT_NEW_USER" : "New pigeon user? Install sample set of tests on the settings page.",
+    "ALERT_SAMPLE_SUCCESS" : "Sample set of tests loaded successfully",
+    "ALERT_IMPORT_SUCCESS" : "Tests successfully imported",
+    "ALERT_SETTINGS_SUCCESS" : "Settings saved",
 
     "LANGUAGE_EN" : "EN",
     "LANGUAGE_RU" : "RU",
@@ -35,6 +41,7 @@
     "SETTINGS_EXECUTION_TIMEOUT_NUMBER_MESSAGE" : "Not a valud execution timeout",
     "SETTINGS_EXPORT_TESTS" : "Export tests",
     "SETTINGS_IMPORT_TESTS" : "Import tests",
+    "SETTINGS_SAMPLE_TESTS" : "Install sample set of tests",
 
     "METHOD_OPEN_TAB" : "Open tab",
     "METHOD_GET_REQUEST" : "GET request",

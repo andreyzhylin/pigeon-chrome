@@ -1,7 +1,7 @@
 <div class="row-fluid top-buffer">
   <form ng-submit="settingsForm.$valid && settingsCtrl.save()" role="form" name="settingsForm" novalidate>
       <div class="form-group">
-        <a download="tests.json" ng-href="{{ export_url }}" class="btn btn-default">{{'SETTINGS_EXPORT_TESTS' | translate}}</a>
+        <a ng-click="settingsCtrl.initSampleProject()" href="" class="btn btn-primary">{{'SETTINGS_SAMPLE_TESTS' | translate}}</a>
       </div>
       <div class="form-group">
         <label>{{'SETTINGS_IMPORT_TESTS' | translate}}</label>
@@ -16,5 +16,6 @@
         </div>
       </div>
       <input type="submit" class="btn btn-default" value="{{'FORM_SUBMIT' | translate}}">
+      <a download="tests.json" ng-href="{{ export_url }}" class="btn btn-default">{{'SETTINGS_EXPORT_TESTS' | translate}}</a>
   </form>
 </div>

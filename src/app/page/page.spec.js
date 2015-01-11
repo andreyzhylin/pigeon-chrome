@@ -77,6 +77,7 @@ describe('PageController', function () {
 
     beforeEach(inject(function (_$rootScope_, _pageService_) {
         $rootScope = _$rootScope_;
+        $rootScope.alerts = [];
         pageService = _pageService_;
     }));
 

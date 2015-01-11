@@ -12,8 +12,17 @@ angular.module('pigeon.overviewController', [
 ])
 
 .controller('OverviewController', [
-    '$scope', 'pageService', 'testService', 'overviewService', 'settingsService', 'statuses',
-    function ($scope, pageService, testService, overviewService, settingsService, statuses) {
+    '$scope', '$translate', 'pageService', 'testService', 'overviewService', 'settingsService', 'statuses',
+    function ($scope, $translate, pageService, testService, overviewService, settingsService, statuses) {
+        $scope.alerts.length = 0;
+        if (pageService.getAll().length === 0) {
+            $scope.alerts.push({
+                type: 'info',
+                translationKey: 'ALERT_NEW_USER',
+                message: $translate.instant('ALERT_NEW_USER')
+            });
+        }
+
         this.shouldHideSuccess = settingsService.getHideSuccess();
 
         $scope.pages = pageService.getAll();

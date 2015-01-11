@@ -58,6 +58,7 @@ describe('FileController', function () {
 
     beforeEach(inject(function (_$rootScope_, _fileService_) {
         $rootScope = _$rootScope_;
+        $rootScope.alerts = [];
         fileService = _fileService_;
     }));
 

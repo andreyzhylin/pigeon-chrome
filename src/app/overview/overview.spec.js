@@ -9,6 +9,7 @@ describe('Pigeon', function () {
     beforeEach(inject(
         function (_$rootScope_, _pageService_, _testService_, _fileService_, _overviewService_, _statuses_) {
             $rootScope = _$rootScope_;
+            $rootScope.alerts = [];
             pageService = _pageService_;
             testService = _testService_;
             fileService = _fileService_;

@@ -6,6 +6,7 @@ angular.module('pigeon.fileController', [
 
 .controller('FileController', ['$scope', '$routeParams', '$location', 'fileService',
     function ($scope, $routeParams, $location, fileService) {
+        $scope.alerts.length = 0;
         $scope.file = {};
         $scope.files = fileService.getAll();
 

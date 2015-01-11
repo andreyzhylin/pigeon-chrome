@@ -6,6 +6,7 @@ angular.module('pigeon.pageController', [
 
 .controller('PageController', ['$scope', '$routeParams', '$location', 'pageService',
     function ($scope, $routeParams, $location, pageService) {
+        $scope.alerts.length = 0;
         $scope.page = {};
         if (angular.isDefined($routeParams.pageIndex)) {
             $scope.page = angular.copy(pageService.get($routeParams.pageIndex));

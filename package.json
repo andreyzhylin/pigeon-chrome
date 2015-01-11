@@ -1,6 +1,6 @@
 {
   "name": "pigeon-chrome",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Tool to test javascript code in the context of specified pages",
   "main": "src/app/app.js",
   "dependencies": {

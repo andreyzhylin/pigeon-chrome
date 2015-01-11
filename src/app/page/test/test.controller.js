@@ -6,6 +6,7 @@ angular.module('pigeon.testController', [
 
 .controller('TestController', ['$scope', '$routeParams', '$location', 'testService',
     function ($scope, $routeParams, $location, testService) {
+        $scope.alerts.length = 0;
         $scope.test = {};
         if (angular.isDefined($routeParams.testIndex)) {
             $scope.test = angular.copy(testService.get($routeParams.pageIndex, $routeParams.testIndex));

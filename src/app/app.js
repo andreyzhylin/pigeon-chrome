@@ -132,6 +132,20 @@ angular.module('pigeon.app', [
     $translateProvider.preferredLanguage('en');
 })
 
+.run(function ($rootScope, $translate) {
+    $rootScope.alerts = [];
+    $rootScope.closeAlert = function (index) {
+        $rootScope.alerts.splice(index, 1);
+    };
+    $rootScope.$on('$translateChangeSuccess', function () {
+        angular.forEach($rootScope.alerts, function (alert) {
+            $translate(alert.translationKey).then(function (translation) {
+                alert.message = translation;
+            });
+        });
+    });
+})
+
 ;
 
 angular.element(document).ready(function () {

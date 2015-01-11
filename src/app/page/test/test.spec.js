@@ -58,6 +58,7 @@ describe('TestController', function () {
     beforeEach(module('pigeon.testController'));
     beforeEach(inject(function (_$rootScope_, _testService_) {
         $rootScope = _$rootScope_;
+        $rootScope.alerts = [];
         testService = _testService_;
     }));
 

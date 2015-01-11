@@ -3,6 +3,12 @@
     "MENU_OVERVIEW" : "Обзор тестов",
     "MENU_FILES" : "Файлы",
     "MENU_SETTINGS" : "Настройки",
+    "MENU_GUIDE" : "Руководство",
+
+    "ALERT_NEW_USER" : "Первый раз в приложении? Установите набор базовых тестов в меню настроек",
+    "ALERT_SAMPLE_SUCCESS" : "Базовый набор тестов успешно загружен",
+    "ALERT_IMPORT_SUCCESS" : "Тесты успешно импортированы",
+    "ALERT_SETTINGS_SUCCESS" : "Настройки сохранены",
 
     "LANGUAGE_EN" : "EN",
     "LANGUAGE_RU" : "RU",
@@ -35,6 +41,7 @@
     "SETTINGS_EXECUTION_TIMEOUT_NUMBER_MESSAGE" : "Некорректный таймаут",
     "SETTINGS_EXPORT_TESTS" : "Экспорт тестов",
     "SETTINGS_IMPORT_TESTS" : "Импорт тестов",
+    "SETTINGS_SAMPLE_TESTS" : "Установить базовый набор",
 
     "METHOD_OPEN_TAB" : "Открытие вкладки",
     "METHOD_GET_REQUEST" : "GET запрос",

@@ -61,6 +61,7 @@ describe('SettingsController', function () {
 
     beforeEach(inject(function (_$rootScope_, _settingsService_) {
         $rootScope = _$rootScope_;
+        $rootScope.alerts = [];
         settingsService = _settingsService_;
     }));
 

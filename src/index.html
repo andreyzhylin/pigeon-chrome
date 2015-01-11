@@ -26,11 +26,16 @@
         			<li><a href="#/overview">{{'MENU_OVERVIEW' | translate}}</a></li>
         			<li><a href="#/files">{{'MENU_FILES' | translate}}</a></li>
         			<li><a href="#/settings">{{'MENU_SETTINGS' | translate}}</a></li>
+        			<li><a target="_blank" href="https://github.com/andreyzhylin/pigeon-chrome">{{'MENU_GUIDE' | translate}} <span icon="new-window"></span></a></li>
         		</ul>
         		<language-picker></language-picker>
 			</div>
 		</div>
 	</nav>
+	<div class="container">
+		<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.message}}</alert>
+	</div>
+
 	<div class="container">
 		<div ng-view></div>
 	</div>
