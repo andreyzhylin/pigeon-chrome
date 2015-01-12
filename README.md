@@ -67,3 +67,4 @@ Navigate to '*/pigeon-chrome/build' directory and select it.
 - Visit settings page and click 'Install sample set of tests'.
 ![Sample set of tests](https://github.com/andreyzhylin/pigeon-chrome/raw/master/common/img/sample-en/sample-3.png)
 - Explore test codes to go deeper.
+- Load external libraries to use in your code (e.g. jQuery) at 'Files' page
